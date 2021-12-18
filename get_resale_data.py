@@ -2,6 +2,8 @@ import requests
 from pprint import pprint
 import pandas as pd
 
+folder_path = 'raw_data/resale_hdb'
+filename = 'resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.csv'
 resource_id = {
     '2017 onwards': 'f1765b54-a209-4718-8d38-a39237f502b3',
     'Jan 2015 - Dec 2016': '1b702208-44bf-4829-b620-4615ee19b57c',
@@ -9,20 +11,34 @@ resource_id = {
     '2000 - Feb 2012': '8c00bf08-9124-479e-aeca-7cc411d884c4',
     '1990 - 1999': 'adbbddd3-30e2-445f-a123-29bee150a6fe'
 }
+data_gov_url = 'https://data.gov.sg/api/action/datastore_search'
 params = {
     'resource_id': resource_id['2017 onwards'],
-    'limit': 100
+    'limit': 1,
+    'sort': 'month',
 }
-response = requests.get(
-    url = 'https://data.gov.sg/api/action/datastore_search',
+
+df_old_csv  = pd.read_csv(f'{folder_path}/{filename}')
+
+nrow_csv = len(df_old_csv)
+
+response_current_total = requests.get(
+    url = data_gov_url,
     params = params
 )
 
-# pprint(response.json()['result']['records'])
+current_total = response_current_total.json()['result']['total']
 
-rows = response.json()['result']['records']
+params.update(limit=current_total - nrow_csv)
+response = requests.get(
+    url = data_gov_url,
+    params = params
+)
 
-df = pd.DataFrame(rows)
-df.to_csv('data1.csv')
+new_rows = response.json()['result']['records']
+
+df = df_old_csv.append(new_rows)
+df.to_csv(f'{folder_path}/{filename}', index=False)
+
 # df.to_parquet('data.parquet')
 # df.to_feather('data.feather')
