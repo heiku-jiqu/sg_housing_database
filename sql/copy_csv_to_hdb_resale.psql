@@ -1,10 +1,7 @@
-BEGIN;
 -- need to run in PSQL, cannot send this query straight to the db server as \COPY is not recognised
-\COPY resale_hdb 
-FROM E'C:\\Users\\Heiser\\Downloads\\Data Science and Analytics Course\\sg_housing_database\\raw_data\\resale_hdb\\resale-flat-prices-based-on-approval-date-2000-feb-2012.csv' 
-WITH (
-    FORMAT csv,
-    HEADER TRUE
-);
+-- psql -U postgres -d sg_housing_database -f "C:\Users\Heiser\Downloads\Data Science and Analytics Course\sg_housing_database\sql\copy_csv_to_hdb_resale.psql"
+BEGIN;
+
+\COPY resale_hdb FROM 'C:/Users/Heiser/Downloads/Data Science and Analytics Course/sg_housing_database/loading_area/resale_hdb/resale_hdb.csv' WITH (FORMAT csv, HEADER TRUE);
 
 COMMIT;
