@@ -1,4 +1,5 @@
 import requests
+import urllib.request
 from pprint import pprint
 import pandas as pd
 import json
@@ -9,26 +10,29 @@ with open('config/keys.json') as f:
     access_key = json.load(f)['ura_access_key']
 
 headers = {
-    'Content-Type': 'application/json',
-    'AccessKey': access_key
+    'AccessKey': access_key,
+    'User-Agent': '' # IMPORTANT: explicitly set user-agent if not API wont work!
 }
-
 token_request = requests.get(
-    url = "https://www.ura.gov.sg/uraDataService/insertNewToken.action",
+    "https://www.ura.gov.sg/uraDataService/insertNewToken.action",
     headers = headers
 )
 token = token_request.json()["Result"]
-headers.update(Token=token)
 
+headers.update(Token=token)
 service = 'PMI_Resi_Transaction'
 params = {
-    'Service': service,
-    'Batch': 1
+    'service': service,
+    'batch': 1
 }
+for i in range(1,5):
+    params.update(batch=i)
+    data_batch_i = requests.get(
+        url = 'https://www.ura.gov.sg/uraDataService/invokeUraDS',
+        params = params,
+        headers = headers
+    )
+    with open(f'{folder_path}/batch_{i}.json', "w") as f:
+        f.write(data_batch_i.text)
 
-data_batch_1 = requests.get(
-    url = 'https://www.ura.gov.sg/uraDataService/invokeUraDS',
-    params = params,
-    headers=headers
-)
-
+# curl "https://www.ura.gov.sg/uraDataService/invokeUraDS?service=PMI_Resi_Transaction&batch=1" -H "AccessKey:access_key" -H "Token:token" > batch1.json

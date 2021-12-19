@@ -3,3 +3,4 @@
 *.parquet
 keys.json
 raw_data/resale_hdb/metadata-resale-flat-prices.txt
+raw_data/private_residential_transactions/*.json
