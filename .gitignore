@@ -1,1 +1,3 @@
 *.csv
+*.zstd
+keys.json
