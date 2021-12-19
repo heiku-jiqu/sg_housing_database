@@ -1,4 +1,5 @@
 *.csv
 *.zstd
+*.parquet
 keys.json
 raw_data/resale_hdb/metadata-resale-flat-prices.txt
