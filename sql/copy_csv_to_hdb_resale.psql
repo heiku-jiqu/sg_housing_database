@@ -1,0 +1,10 @@
+BEGIN;
+-- need to run in PSQL, cannot send this query straight to the db server as \COPY is not recognised
+\COPY resale_hdb 
+FROM E'C:\\Users\\Heiser\\Downloads\\Data Science and Analytics Course\\sg_housing_database\\raw_data\\resale_hdb\\resale-flat-prices-based-on-approval-date-2000-feb-2012.csv' 
+WITH (
+    FORMAT csv,
+    HEADER TRUE
+);
+
+COMMIT;

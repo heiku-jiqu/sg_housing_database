@@ -1,0 +1,17 @@
+BEGIN;
+
+CREATE TABLE resale_hdb
+(
+    month text,
+    town text,
+    flat_type text,
+    block text,
+    street text,
+    storey text,
+    floor_area_sqm float,
+    flat_model text,
+    lease_commence_date text,
+    resale_price float
+);
+
+COMMIT;

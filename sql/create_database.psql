@@ -1,0 +1,2 @@
+CREATE DATABASE sg_housing_database;
+-- \c sg_housing_database -- switch to the newly created database
