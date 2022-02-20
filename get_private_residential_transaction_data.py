@@ -27,6 +27,7 @@ params = {
     'batch': 1
 }
 for i in range(1,5):
+    print(f'fetching batch {i}')
     params.update(batch=i)
     data_batch_i = requests.get(
         url = 'https://www.ura.gov.sg/uraDataService/invokeUraDS',
@@ -36,6 +37,8 @@ for i in range(1,5):
 
     if data_batch_i.text.startswith('<!DOCTYPE html>'):
         raise Exception('Fetched data not a valid JSON. Check if User-Agent is specified manually.')
+
+    print(f'writing batch {i} to file')
     with open(f'{folder_path}/batch_{i}_{datetime.date.today()}.json', "w", encoding='utf-8') as f:
         f.write(data_batch_i.text)
 
