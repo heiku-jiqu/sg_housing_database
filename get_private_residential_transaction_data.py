@@ -3,6 +3,7 @@ import urllib.request
 from pprint import pprint
 import pandas as pd
 import json
+import datetime
 
 folder_path = 'raw_data/private_residential_transactions'
 
@@ -11,7 +12,7 @@ with open('config/keys.json') as f:
 
 headers = {
     'AccessKey': access_key,
-    'User-Agent': '' # IMPORTANT: explicitly set user-agent if not API wont work!
+    'User-Agent': 'PostmanRuntime/7.29.0' # IMPORTANT: explicitly set user-agent if not API wont work!
 }
 token_request = requests.get(
     "https://www.ura.gov.sg/uraDataService/insertNewToken.action",
@@ -32,7 +33,10 @@ for i in range(1,5):
         params = params,
         headers = headers
     )
-    with open(f'{folder_path}/batch_{i}.json', "w") as f:
+
+    if data_batch_i.text.startswith('<!DOCTYPE html>'):
+        raise Exception('Fetched data not a valid JSON. Check if User-Agent is specified manually.')
+    with open(f'{folder_path}/batch_{i}_{datetime.date.today()}.json', "w", encoding='utf-8') as f:
         f.write(data_batch_i.text)
 
 # curl "https://www.ura.gov.sg/uraDataService/invokeUraDS?service=PMI_Resi_Transaction&batch=1" -H "AccessKey:access_key" -H "Token:token" > batch1.json
