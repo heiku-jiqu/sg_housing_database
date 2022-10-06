@@ -4,6 +4,7 @@ import pandas as pd
 import json
 import datetime
 import typing
+import concurrent.futures
 
 
 def read_access_key_json(path: str = "config/keys.json") -> str:
@@ -42,16 +43,19 @@ def download_private_residential_data(batch: int, headers: dict):
     ) as f:
         f.write(data_batch_i.text)
 
+
 if __name__ == "__main__":
     access_key = read_access_key_json()
     headers = {
         "AccessKey": access_key,
         "User-Agent": "PostmanRuntime/7.29.0",  # IMPORTANT: explicitly set user-agent if not API wont work!
     }
-    token = get_api_token(headers) 
+    token = get_api_token(headers)
     headers.update(Token=token)
-    for i in range(1, 5):
-        download_private_residential_data(i, headers)
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        for i in range(1, 5):
+            executor.submit(download_private_residential_data, i, headers)
 
 
 # curl "https://www.ura.gov.sg/uraDataService/invokeUraDS?service=PMI_Resi_Transaction&batch=1" -H "AccessKey:access_key" -H "Token:token" > batch1.json
