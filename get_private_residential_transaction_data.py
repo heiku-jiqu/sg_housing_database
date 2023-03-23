@@ -1,8 +1,9 @@
 import requests
-import pandas as pd
 import json
 import datetime
 import concurrent.futures
+from pyarrow import Table
+import pyarrow.parquet as pq
 
 
 def read_access_key_json(path: str = "config/keys.json") -> str:
@@ -32,7 +33,7 @@ def download_private_residential_data(batch: int, headers: dict):
             "Fetched data not a valid JSON. Check if User-Agent is specified manually."
         )
 
-    print(f"writing batch {batch} to file")
+    print(f"writing batch {batch} to json file")
     folder_path = "raw_data/private_residential_transactions"
     with open(
         f"{folder_path}/batch_{batch}_{datetime.date.today()}.json",
@@ -40,6 +41,14 @@ def download_private_residential_data(batch: int, headers: dict):
         encoding="utf-8",
     ) as f:
         f.write(data_batch_i.text)
+
+    print(f"writing batch {batch} to parquet zstd file")
+    pa_table = Table.from_pylist(data_batch_i.json()["Result"])
+    pq.write_table(
+        pa_table,
+        f"{folder_path}/batch_{batch}_{datetime.date.today()}.parquet.zstd",
+        compression="zstd",
+    )
 
 
 if __name__ == "__main__":
