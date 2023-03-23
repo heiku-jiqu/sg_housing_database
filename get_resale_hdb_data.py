@@ -1,6 +1,8 @@
 import requests
 from pprint import pprint
 import pandas as pd
+from pyarrow import Table
+import pyarrow.parquet as pq
 
 folder_path = "raw_data/resale_hdb"
 filename = "resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.csv"
@@ -28,5 +30,5 @@ df_out = pd.json_normalize(response.json(), record_path=["result", "records"])
 
 df_out.to_csv(f"{folder_path}/{filename}", index=False)
 
-# df.to_parquet('data.parquet')
-# df.to_feather('data.feather')
+pa_table = Table.from_pylist(response.json()["result"]["records"])
+pq.write_table(pa_table, f"{folder_path}/{filename}.parquet.zstd", compression="zstd")
