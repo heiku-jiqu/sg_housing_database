@@ -21,7 +21,7 @@ def get_api_token(headers: dict) -> str:
 
 def download_private_residential_data(batch: int, headers: dict):
     params = {"service": "PMI_Resi_Transaction", "batch": batch}
-    print(f"fetching batch {i}")
+    print(f"fetching private residential data (batch {i})")
     data_batch_i = requests.get(
         url="https://www.ura.gov.sg/uraDataService/invokeUraDS",
         params=params,
