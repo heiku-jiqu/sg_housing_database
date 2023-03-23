@@ -18,12 +18,7 @@ params = {
     "sort": "month",
 }
 
-df_old_csv = pd.read_csv(f"{folder_path}/{filename}")
-
-nrow_csv = len(df_old_csv)
-
 response_current_total = requests.get(url=data_gov_url, params=params)
-
 current_total = response_current_total.json()["result"]["total"]
 
 params.update(limit=current_total)
