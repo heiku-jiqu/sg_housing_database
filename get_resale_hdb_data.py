@@ -1,9 +1,6 @@
 import requests
-from pprint import pprint
-import pandas as pd
 from pyarrow import Table
 import pyarrow.parquet as pq
-
 
 def request_resale_hdb_data():
     resource_id = {

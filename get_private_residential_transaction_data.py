@@ -1,9 +1,7 @@
 import requests
-from pprint import pprint
 import pandas as pd
 import json
 import datetime
-import typing
 import concurrent.futures
 
 
