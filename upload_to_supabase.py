@@ -11,7 +11,7 @@ def get_supabase_configs():
 
 configs = get_supabase_configs()
 filepath = "raw_data/resale_hdb/resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.parquet.zstd"
-filename = "resale.paruqet.zstd"
+filename = "resale.parquet.zstd"
 url = f"{configs['endpoint']}/storage/v1/object/sg-housing-db/{filename}"
 res = requests.post(
     url=url,
