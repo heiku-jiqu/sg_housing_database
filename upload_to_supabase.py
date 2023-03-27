@@ -1,6 +1,6 @@
 import requests
 import json
-from io import BytesIO
+from io import BytesIO, RawIOBase
 import pyarrow.parquet as pq
 
 
@@ -9,24 +9,33 @@ def get_supabase_configs():
         return json.load(f)["supabase"]
 
 
+def upload_file_to_supabase(
+    config, bucket: str, filename: str, file: RawIOBase
+) -> requests.Response:
+    url = f"{config['endpoint']}/storage/v1/object/{bucket}/{filename}"
+    res = requests.post(
+        url=url,
+        headers={
+            "apikey": config["config"]["service_key"],
+            "authorization": f'Bearer {config["config"]["service_key"]}',
+        },
+        files={
+            filename: (
+                filename,
+                file,
+                "application/octet-stream",
+            )
+        },
+    )
+    return res
+
+
 configs = get_supabase_configs()
 filepath = "raw_data/resale_hdb/resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.parquet.zstd"
+file = open(filepath, "rb")
 filename = "resale.parquet.zstd"
-url = f"{configs['endpoint']}/storage/v1/object/sg-housing-db/{filename}"
-res = requests.post(
-    url=url,
-    headers={
-        "apikey": configs["config"]["service_key"],
-        "authorization": f'Bearer {configs["config"]["service_key"]}',
-    },
-    files={
-        "resale.parquet.zstd": (
-            "hello",
-            open(filepath, "rb"),
-            "application/octet-stream",
-        )
-    },
-)
+bucket = "sg-housing-db"
+res = upload_file_to_supabase(configs, bucket, filename, file)
 print(res.content)
 
 priv_filename = (
