@@ -1,3 +1,4 @@
+from typing import Optional
 import requests
 import json
 from io import BytesIO, RawIOBase
@@ -30,8 +31,34 @@ def upload_file_to_supabase(
     return res
 
 
+def list_files_from_supabase_bucket(
+    config, bucket: str, prefix: str = "", filename: Optional[str] = None
+) -> requests.Response:
+    url = f"{config['endpoint']}/storage/v1/object/list/{bucket}"
+    res = requests.post(
+        url=url,
+        headers={
+            "apikey": config["config"]["service_key"],
+            "authorization": f'Bearer {config["config"]["service_key"]}',
+        },
+        json={"prefix": prefix, "search": filename},
+    )
+    return res
+
+
 configs = get_supabase_configs()
 bucket = "sg-housing-db"
+
+file_info_response = list_files_from_supabase_bucket(
+    configs, bucket, prefix="", filename="resale.parquet.zstd"
+)
+print(len(file_info_response.json()))
+
+file_info_non_response = list_files_from_supabase_bucket(
+    configs, bucket, prefix="", filename="non-existent-file"
+)
+print(len(file_info_non_response.json()))
+
 filepath = "raw_data/resale_hdb/resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.parquet.zstd"
 file = open(filepath, "rb")
 filename = "resale.parquet.zstd"
