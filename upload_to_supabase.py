@@ -11,7 +11,7 @@ def get_supabase_configs():
 
 
 def upload_file_to_supabase(
-    config, bucket: str, filename: str, file: RawIOBase
+    config, bucket: str, filename: str, file: RawIOBase, upsert: bool = False
 ) -> requests.Response:
     url = f"{config['endpoint']}/storage/v1/object/{bucket}/{filename}"
     res = requests.post(
@@ -19,6 +19,7 @@ def upload_file_to_supabase(
         headers={
             "apikey": config["config"]["service_key"],
             "authorization": f'Bearer {config["config"]["service_key"]}',
+            "x-upsert": str(upsert).lower(),
         },
         files={
             filename: (
