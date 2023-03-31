@@ -10,6 +10,20 @@ def get_supabase_configs():
         return json.load(f)["supabase"]
 
 
+def download_file_from_supabase(
+    config, bucket: str, filename: str
+) -> requests.Response:
+    url = f"{config['endpoint']}/storage/v1/object/authenticated/{bucket}/{filename}"
+    res = requests.get(
+        url,
+        headers={
+            "apikey": config["config"]["service_key"],
+            "authorization": f'Bearer {config["config"]["service_key"]}',
+        },
+    )
+    return res
+
+
 def upload_file_to_supabase(
     config, bucket: str, filename: str, file: RawIOBase, upsert: bool = False
 ) -> requests.Response:
