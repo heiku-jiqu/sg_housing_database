@@ -23,19 +23,17 @@ def get_api_token(headers: dict) -> str:
 def download_private_residential_data(batch: int, headers: dict):
     params = {"service": "PMI_Resi_Transaction", "batch": batch}
     print(f"fetching private residential data (batch {i})")
-    data_batch_i = requests.get(
+    response = requests.get(
         url="https://www.ura.gov.sg/uraDataService/invokeUraDS",
         params=params,
         headers=headers,
     )
 
-    if data_batch_i.text.startswith("<!DOCTYPE html>"):
+    if response.text.startswith("<!DOCTYPE html>"):
         raise Exception(
             "Fetched data not a valid JSON. Check if User-Agent is specified manually."
         )
-
-    write_to_json(data_batch_i, batch)
-    write_to_parquet(data_batch_i, batch)
+    return response
 
 
 def write_to_json(
@@ -75,9 +73,14 @@ if __name__ == "__main__":
     token = get_api_token(headers)
     headers.update(Token=token)
 
+    def download_and_save_locally(batch, headers):
+        res = download_private_residential_data(batch, headers)
+        write_to_json(res, batch)
+        write_to_parquet(res, batch)
+
     with concurrent.futures.ThreadPoolExecutor() as executor:
         for i in range(1, 5):
-            executor.submit(download_private_residential_data, i, headers)
+            executor.submit(download_and_save_locally, i, headers)
 
 
 # curl "https://www.ura.gov.sg/uraDataService/invokeUraDS?service=PMI_Resi_Transaction&batch=1" -H "AccessKey:access_key" -H "Token:token" > batch1.json
