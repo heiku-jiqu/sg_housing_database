@@ -1,4 +1,5 @@
 import requests
+from requests import Response
 import json
 import datetime
 import concurrent.futures
@@ -33,17 +34,31 @@ def download_private_residential_data(batch: int, headers: dict):
             "Fetched data not a valid JSON. Check if User-Agent is specified manually."
         )
 
+    write_to_json(data_batch_i, batch)
+    write_to_parquet(data_batch_i, batch)
+
+
+def write_to_json(
+    response: Response,
+    batch: int,
+    folder_path: str = "raw_data/private_residential_transactions",
+):
     print(f"writing batch {batch} to json file")
-    folder_path = "raw_data/private_residential_transactions"
     with open(
         f"{folder_path}/batch_{batch}_{datetime.date.today()}.json",
         "w",
         encoding="utf-8",
     ) as f:
-        f.write(data_batch_i.text)
+        f.write(response.text)
 
+
+def write_to_parquet(
+    response: Response,
+    batch: int,
+    folder_path: str = "raw_data/private_residential_transactions",
+):
     print(f"writing batch {batch} to parquet zstd file")
-    pa_table = Table.from_pylist(data_batch_i.json()["Result"])
+    pa_table = Table.from_pylist(response.json()["Result"])
     pq.write_table(
         pa_table,
         f"{folder_path}/batch_{batch}_{datetime.date.today()}.parquet.zstd",
