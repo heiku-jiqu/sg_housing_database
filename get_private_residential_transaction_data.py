@@ -20,7 +20,7 @@ def get_api_token(headers: dict) -> str:
     return token_request.json()["Result"]
 
 
-def download_private_residential_data(batch: int, headers: dict):
+def request_private_residential_data(batch: int, headers: dict):
     params = {"service": "PMI_Resi_Transaction", "batch": batch}
     print(f"fetching private residential data (batch {i})")
     response = requests.get(
@@ -73,14 +73,14 @@ if __name__ == "__main__":
     token = get_api_token(headers)
     headers.update(Token=token)
 
-    def download_and_save_locally(batch, headers):
-        res = download_private_residential_data(batch, headers)
+    def request_and_save_locally(batch, headers):
+        res = request_private_residential_data(batch, headers)
         write_to_json(res, batch)
         write_to_parquet(res, batch)
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
         for i in range(1, 5):
-            executor.submit(download_and_save_locally, i, headers)
+            executor.submit(request_and_save_locally, i, headers)
 
 
 # curl "https://www.ura.gov.sg/uraDataService/invokeUraDS?service=PMI_Resi_Transaction&batch=1" -H "AccessKey:access_key" -H "Token:token" > batch1.json
