@@ -12,11 +12,11 @@ class ResourceID(Enum):
     JAN1990_TO_JAN1999 = "adbbddd3-30e2-445f-a123-29bee150a6fe"
 
 
-def request_resale_hdb_data():
+def request_resale_hdb_data(resource_id: ResourceID = ResourceID.JAN2017_ONWARDS):
     data_gov_url = "https://data.gov.sg/api/action/datastore_search"
 
     params = {
-        "resource_id": ResourceID.JAN2017_ONWARDS.value,
+        "resource_id": resource_id.value,
         "limit": 1,
         "sort": "month",
     }
