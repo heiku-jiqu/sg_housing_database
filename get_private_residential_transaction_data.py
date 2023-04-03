@@ -4,6 +4,7 @@ import json
 import datetime
 import concurrent.futures
 from pyarrow import Table
+import pyarrow as pa
 import pyarrow.parquet as pq
 
 
@@ -79,8 +80,27 @@ if __name__ == "__main__":
         write_to_parquet(res, batch)
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = {}
         for i in range(1, 5):
-            executor.submit(request_and_save_locally, i, headers)
+            futures.update(
+                {executor.submit(request_private_residential_data, i, headers): i}
+            )
+        results = []
+        for future in futures.keys():
+            batch = futures[future]
+            try:
+                data = future.result()
+                results.append(data)
+            except Exception as exc:
+                print(f"batch {batch} generated an exception: {exc}")
+
+    pa_tables = [Table.from_pylist(response.json()["Result"]) for response in results]
+    joined_table = pa.concat_tables(pa_tables)
+    pq.write_table(
+        joined_table,
+        "raw_data/private_residential_transactions/all_batches_joined.parquet.zstd",
+        compression="zstd",
+    )
 
 
 # curl "https://www.ura.gov.sg/uraDataService/invokeUraDS?service=PMI_Resi_Transaction&batch=1" -H "AccessKey:access_key" -H "Token:token" > batch1.json
