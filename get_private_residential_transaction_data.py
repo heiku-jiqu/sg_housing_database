@@ -6,6 +6,7 @@ import concurrent.futures
 from pyarrow import Table
 import pyarrow as pa
 import pyarrow.parquet as pq
+from typing import List
 
 
 def read_access_key_json(path: str = "config/keys.json") -> str:
@@ -65,20 +66,13 @@ def write_to_parquet(
     )
 
 
-if __name__ == "__main__":
-    access_key = read_access_key_json()
-    headers = {
-        "AccessKey": access_key,
-        "User-Agent": "PostmanRuntime/7.29.0",  # IMPORTANT: explicitly set user-agent if not API wont work!
-    }
-    token = get_api_token(headers)
-    headers.update(Token=token)
+def request_and_save_locally(batch, headers):
+    res = request_private_residential_data(batch, headers)
+    write_to_json(res, batch)
+    write_to_parquet(res, batch)
 
-    def request_and_save_locally(batch, headers):
-        res = request_private_residential_data(batch, headers)
-        write_to_json(res, batch)
-        write_to_parquet(res, batch)
 
+def request_private_residential_data_batches_concurrent(headers) -> List[Response]:
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = {}
         for i in range(1, 5):
@@ -93,8 +87,25 @@ if __name__ == "__main__":
                 results.append(data)
             except Exception as exc:
                 print(f"batch {batch} generated an exception: {exc}")
+        return results
 
-    pa_tables = [Table.from_pylist(response.json()["Result"]) for response in results]
+
+def priv_residential_data_response_to_pyarrow(res: Response) -> pa.Table:
+    return Table.from_pylist(res.json()["Result"])
+
+
+if __name__ == "__main__":
+    access_key = read_access_key_json()
+    headers = {
+        "AccessKey": access_key,
+        "User-Agent": "PostmanRuntime/7.29.0",  # IMPORTANT: explicitly set user-agent if not API wont work!
+    }
+    token = get_api_token(headers)
+    headers.update(Token=token)
+    results = request_private_residential_data_batches_concurrent(headers)
+    pa_tables = [
+        priv_residential_data_response_to_pyarrow(response) for response in results
+    ]
     joined_table = pa.concat_tables(pa_tables)
     pq.write_table(
         joined_table,
