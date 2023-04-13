@@ -58,7 +58,7 @@ def write_to_parquet(
     folder_path: str = "raw_data/private_residential_transactions",
 ):
     print(f"writing batch {batch} to parquet zstd file")
-    pa_table = Table.from_pylist(response.json()["Result"])
+    pa_table: Table = Table.from_pylist(response.json()["Result"])
     pq.write_table(
         pa_table,
         f"{folder_path}/batch_{batch}_{datetime.date.today()}.parquet.zstd",
@@ -90,7 +90,7 @@ def request_private_residential_data_batches_concurrent(headers) -> List[Respons
         return results
 
 
-def priv_residential_data_response_to_pyarrow(res: Response) -> pa.Table:
+def priv_residential_data_response_to_pyarrow(res: Response) -> Table:
     return Table.from_pylist(res.json()["Result"])
 
 
