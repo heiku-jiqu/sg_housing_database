@@ -15,9 +15,24 @@
 			true
 		);
 
+		const another_data = await fetch('/api/blob_data');
+		const pq_data_array = new Uint8Array(await another_data.arrayBuffer());
+		await duckdb.registerFileBuffer('pq_file_buffer.parquet', pq_data_array);
+
 		const c = await duckdb.connect();
+		await c.query(`
+			CREATE TABLE IF NOT EXISTS duplicated AS
+			SELECT * FROM 'pq_file_buffer.parquet' UNION ALL SELECT * FROM 'resale.parquet';
+		`);
 		const res = await c.query(`
-            SELECT * FROM 'resale.parquet' LIMIT 5;
+            SELECT 
+				month, 
+				avg(CAST(resale_price AS INTEGER)) AS avg_cost 
+			FROM duplicated
+			WHERE town = 'YISHUN' 
+			AND resale_price > 600000
+			GROUP BY month
+			;
         `);
 		return res;
 	}
