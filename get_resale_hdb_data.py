@@ -1,4 +1,5 @@
 import requests
+import pyarrow as pa
 from pyarrow import Table
 import pyarrow.parquet as pq
 from enum import Enum
@@ -45,3 +46,21 @@ if __name__ == "__main__":
     pq.write_table(
         pa_table, f"{folder_path}/{filename}.parquet.zstd", compression="zstd"
     )
+
+    jan2017_onwards_pa_schema = pa.schema(
+        [
+            ("town", pa.string()),
+            ("flat_type", pa.string()),  # can be dictionary
+            ("flat_model", pa.string()),
+            ("floor_area_sqm", pa.float32()),
+            ("street_name", pa.string()),
+            ("resale_price", pa.float32()),
+            ("month", pa.string()),
+            ("remaining_lease", pa.string()),
+            ("lease_commence_date", pa.string()),
+            ("storey_range", pa.string()),
+            ("_id", pa.string()),
+            ("block", pa.string()),
+        ]
+    )
+    pa_table.cast(jan2017_onwards_pa_schema)
