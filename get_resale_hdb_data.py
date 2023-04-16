@@ -28,6 +28,24 @@ def request_resale_hdb_data(resource_id: ResourceID = ResourceID.JAN2017_ONWARDS
     return response
 
 
+JAN2017_ONWARDS_PA_SCHEMA = pa.schema(
+    [
+        ("town", pa.string()),
+        ("flat_type", pa.string()),
+        ("flat_model", pa.string()),
+        ("floor_area_sqm", pa.float32()),
+        ("street_name", pa.string()),
+        ("resale_price", pa.float32()),
+        ("month", pa.string()),
+        ("remaining_lease", pa.string()),
+        ("lease_commence_date", pa.string()),
+        ("storey_range", pa.string()),
+        ("_id", pa.int32()),
+        ("block", pa.string()),
+    ]
+)
+
+
 if __name__ == "__main__":
     folder_path = "raw_data/resale_hdb"
     filename = "resale-flat-prices-based-on-registration-date-from-jan-2017-onwards"
@@ -47,20 +65,26 @@ if __name__ == "__main__":
         pa_table, f"{folder_path}/{filename}.parquet.zstd", compression="zstd"
     )
 
-    jan2017_onwards_pa_schema = pa.schema(
-        [
-            ("town", pa.string()),
-            ("flat_type", pa.string()),  # can be dictionary
-            ("flat_model", pa.string()),
-            ("floor_area_sqm", pa.float32()),
-            ("street_name", pa.string()),
-            ("resale_price", pa.float32()),
-            ("month", pa.string()),
-            ("remaining_lease", pa.string()),
-            ("lease_commence_date", pa.string()),
-            ("storey_range", pa.string()),
-            ("_id", pa.string()),
-            ("block", pa.string()),
-        ]
+    pa_table_dict_encoded = (
+        pa_table.cast(JAN2017_ONWARDS_PA_SCHEMA)
+        .set_column(
+            pa_table.column_names.index("town"),
+            "town",
+            pa_table.column("town").dictionary_encode(),
+        )
+        .set_column(
+            pa_table.column_names.index("flat_type"),
+            "flat_type",
+            pa_table.column("flat_type").dictionary_encode(),
+        )
+        .set_column(
+            pa_table.column_names.index("flat_model"),
+            "flat_model",
+            pa_table.column("flat_model").dictionary_encode(),
+        )
     )
-    pa_table.cast(jan2017_onwards_pa_schema)
+    pq.write_table(
+        pa_table_dict_encoded,
+        f"{folder_path}/{filename}_dict_enc.parquet.zstd",
+        compression="zstd",
+    )
