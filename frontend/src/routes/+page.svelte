@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { initDB } from '$lib/duckdb';
+	import { chart } from '$lib/echarts';
 	import { detach_before_dev, onMount } from 'svelte/internal';
 	import { DuckDBDataProtocol } from '@duckdb/duckdb-wasm';
 	async function load_db() {
@@ -37,6 +38,22 @@
 		return res;
 	}
 	let result_promise = load_db();
+	$: opt = {
+		title: {
+			text: 'ECharts Getting Started Example'
+		},
+		xAxis: {
+			data: ['shirt', 'cardigan', 'chiffon', 'pants', 'heels', 'socks']
+		},
+		yAxis: {},
+		series: [
+			{
+				name: 'sales',
+				type: 'bar',
+				data: [5, 20, 36, 10, 10, 20]
+			}
+		]
+	};
 </script>
 
 <h1>Welcome to SvelteKit</h1>
@@ -44,4 +61,5 @@
 
 {#await result_promise then table}
 	{table}
+	<div style:height="400px" style:width="400px" use:chart={opt} />
 {/await}
