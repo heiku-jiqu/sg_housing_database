@@ -15,6 +15,7 @@ class ResourceID(Enum):
 
 
 def request_resale_hdb_data(resource_id: ResourceID = ResourceID.JAN2017_ONWARDS):
+    print(f"fetching {resource_id}")
     data_gov_url = "https://data.gov.sg/api/action/datastore_search"
 
     params = {
