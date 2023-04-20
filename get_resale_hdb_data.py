@@ -3,6 +3,7 @@ import pyarrow as pa
 from pyarrow import Table
 import pyarrow.parquet as pq
 from enum import Enum
+from typing import List
 
 
 class ResourceID(Enum):
@@ -44,6 +45,40 @@ JAN2017_ONWARDS_PA_SCHEMA = pa.schema(
         ("block", pa.string()),
     ]
 )
+
+JAN1990_TO_DEC2014_PA_SCHEMA = pa.schema(
+    [
+        ("town", pa.string()),
+        ("flat_type", pa.string()),
+        ("flat_model", pa.string()),
+        ("floor_area_sqm", pa.float32()),
+        ("street_name", pa.string()),
+        ("resale_price", pa.float32()),
+        ("month", pa.string()),
+        ("lease_commence_date", pa.string()),
+        ("storey_range", pa.string()),
+        ("_id", pa.int32()),
+        ("block", pa.string()),
+    ]
+)
+
+
+def dict_encode_cols(
+    table: pa.Table, columns: List[str] = ["town", "flat_type", "flat_model"]
+) -> pa.Table:
+    res = table
+    for col in columns:
+        res = dict_encode_col(res, col)
+    return res
+
+
+def dict_encode_col(table: pa.Table, col: str) -> pa.Table:
+    table.set_column(
+        table.column_names.index(col),
+        col,
+        table.column(col).dictionary_encode(),
+    )
+    return table
 
 
 if __name__ == "__main__":
@@ -87,4 +122,28 @@ if __name__ == "__main__":
         pa_table_dict_encoded,
         f"{folder_path}/{filename}_dict_enc.parquet.zstd",
         compression="zstd",
+    )
+
+    print("fetching JAN2015 TO DEC2017 Data")
+    res2 = request_resale_hdb_data(ResourceID.JAN2015_TO_DEC2017)
+    pa_table2 = Table.from_pylist(res2.json()["result"]["records"])
+    pa_table2_dict_encoded = dict_encode_cols(pa_table2.cast(JAN2017_ONWARDS_PA_SCHEMA))
+
+    print("fetching MAR2012 TO DEC2014 Data")
+    res3 = request_resale_hdb_data(ResourceID.MAR2012_TO_DEC2014)
+    pa_table3 = Table.from_pylist(res3.json()["result"]["records"])
+    pa_table3_dict_encoded = dict_encode_cols(
+        pa_table3.cast(JAN1990_TO_DEC2014_PA_SCHEMA)
+    )
+    print("fetching JAN2000 TO FEB2012 Data")
+    res4 = request_resale_hdb_data(ResourceID.MAR2012_TO_DEC2014)
+    pa_table4 = Table.from_pylist(res4.json()["result"]["records"])
+    pa_table4_dict_encoded = dict_encode_cols(
+        pa_table4.cast(JAN1990_TO_DEC2014_PA_SCHEMA)
+    )
+    print("fetching JAN1990 TO DEC1999 Data")
+    res5 = request_resale_hdb_data(ResourceID.MAR2012_TO_DEC2014)
+    pa_table5 = Table.from_pylist(res5.json()["result"]["records"])
+    pa_table5_dict_encoded = dict_encode_cols(
+        pa_table5.cast(JAN1990_TO_DEC2014_PA_SCHEMA)
     )
