@@ -100,24 +100,8 @@ if __name__ == "__main__":
         pa_table, f"{folder_path}/{filename}.parquet.zstd", compression="zstd"
     )
 
-    pa_table_dict_encoded = (
-        pa_table.cast(JAN2017_ONWARDS_PA_SCHEMA)
-        .set_column(
-            pa_table.column_names.index("town"),
-            "town",
-            pa_table.column("town").dictionary_encode(),
-        )
-        .set_column(
-            pa_table.column_names.index("flat_type"),
-            "flat_type",
-            pa_table.column("flat_type").dictionary_encode(),
-        )
-        .set_column(
-            pa_table.column_names.index("flat_model"),
-            "flat_model",
-            pa_table.column("flat_model").dictionary_encode(),
-        )
-    )
+    pa_table_dict_encoded = dict_encode_cols(pa_table.cast(JAN2017_ONWARDS_PA_SCHEMA))
+
     pq.write_table(
         pa_table_dict_encoded,
         f"{folder_path}/{filename}_dict_enc.parquet.zstd",
