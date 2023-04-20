@@ -31,7 +31,6 @@
 				avg(CAST(resale_price AS INTEGER)) AS avg_cost 
 			FROM duplicated
 			WHERE town = 'YISHUN' 
-			AND resale_price > 600000
 			GROUP BY month
 			;
         `);
@@ -42,17 +41,18 @@
 		title: {
 			text: 'ECharts Getting Started Example'
 		},
-		xAxis: {
-			data: ['shirt', 'cardigan', 'chiffon', 'pants', 'heels', 'socks']
-		},
+		xAxis: { type: 'category' },
 		yAxis: {},
 		series: [
 			{
-				name: 'sales',
-				type: 'bar',
-				data: [5, 20, 36, 10, 10, 20]
+				type: 'scatter',
+				encode: {
+					x: 'month',
+					y: 'avg_cost'
+				}
 			}
-		]
+		],
+		tooltip: { show: true }
 	};
 </script>
 
@@ -60,6 +60,14 @@
 <p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
 
 {#await result_promise then table}
-	{table}
-	<div style:height="400px" style:width="400px" use:chart={opt} />
+	<div
+		style:height="600px"
+		style:width="1200px"
+		use:chart={{
+			dataset: {
+				source: table.toArray()
+			},
+			...opt
+		}}
+	/>
 {/await}
