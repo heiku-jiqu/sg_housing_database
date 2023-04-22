@@ -86,16 +86,16 @@ if __name__ == "__main__":
     folder_path = "raw_data/resale_hdb"
     filename = "resale-flat-prices-based-on-registration-date-from-jan-2017-onwards"
 
-    print("fetching resale hdb data")
+    print("fetching JAN2017_ONWARDS resale hdb data")
     response = request_resale_hdb_data()
 
     # write to json file
-    print("writing resale hdb data to json file")
+    print("writing JAN2017_ONWARDS resale hdb data to json file")
     with open(f"{folder_path}/{filename}.json", "wb") as f:
         f.write(response.content)
 
     # write to parquet file
-    print("writing resale hdb data to parquet zstd file")
+    print("writing JAN2017_ONWARDS resale hdb data to parquet zstd file")
     pa_table = Table.from_pylist(response.json()["result"]["records"])
     pq.write_table(
         pa_table, f"{folder_path}/{filename}.parquet.zstd", compression="zstd"

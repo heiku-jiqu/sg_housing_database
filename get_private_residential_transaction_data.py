@@ -102,6 +102,7 @@ if __name__ == "__main__":
     }
     token = get_api_token(headers)
     headers.update(Token=token)
+    print("fetching private residential data")
     results = request_private_residential_data_batches_concurrent(headers)
     pa_tables = [
         priv_residential_data_response_to_pyarrow(response) for response in results
