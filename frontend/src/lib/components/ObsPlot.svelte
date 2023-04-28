@@ -2,15 +2,7 @@
 	import * as Plot from '@observablehq/plot';
 	import { onMount } from 'svelte';
 
-	export let chartData;
-	export let plotOpt: Plot.PlotOptions = {
-		marks: [Plot.line(chartData, { x: 'month', y: 'avg_cost' })],
-		marginLeft: 70,
-		style: {
-			backgroundColor: 'transparent',
-			width: '1200px'
-		}
-	};
+	export let plotOpt: Plot.PlotOptions;
 
 	function plot(node: HTMLElement) {
 		node.appendChild(Plot.plot(plotOpt));

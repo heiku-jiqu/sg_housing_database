@@ -1,11 +1,12 @@
 <script lang="ts">
 	import Echarts from '$lib/components/Echarts.svelte';
 	import ObsPlot from '$lib/components/ObsPlot.svelte';
+	import * as Plot from '@observablehq/plot';
 	export let data;
 
 	$: opt = {
 		dataset: {
-			source: data.result.toArray()
+			source: data.avg_cost_per_month.toArray()
 		},
 		title: {
 			text: 'ECharts Getting Started Example'
@@ -27,4 +28,41 @@
 
 <Echarts options={opt} />
 
-<ObsPlot chartData={data.result.toArray().map((x) => ({ ...x, month: new Date(x.month) }))} />
+<ObsPlot
+	plotOpt={{
+		marks: [
+			Plot.line(
+				data.avg_cost_per_month.toArray().map((x) => ({ ...x, month: new Date(x.month) })),
+				{ x: 'month', y: 'avg_cost' }
+			)
+		],
+		marginLeft: 70,
+		style: {
+			backgroundColor: 'transparent',
+			width: '1200px'
+		}
+	}}
+/>
+
+<ObsPlot
+	plotOpt={{
+		marks: [
+			Plot.line(
+				data.median_cost_per_month_per_town
+					.toArray()
+					.map((x) => ({ ...x, month: new Date(x.month) })),
+				{
+					x: 'month',
+					y: 'median_cost',
+					stroke: 'town',
+					strokeOpacity: 0.5
+				}
+			)
+		],
+		marginLeft: 70,
+		style: {
+			width: '1200px',
+			backgroundColor: 'transparent'
+		}
+	}}
+/>

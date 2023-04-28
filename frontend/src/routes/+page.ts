@@ -6,16 +6,16 @@ export const ssr = false;
 
 export async function load({ fetch }) {
 	const duckdb = await initDB();
-	const pq_data = await fetch('/api/blob_data');
-	const pq_data_blob = await pq_data.blob();
-	console.log(pq_data_blob);
-	const parquetFile = new File([pq_data_blob], 'pq_file');
-	await duckdb.registerFileHandle(
-		'resale.parquet',
-		parquetFile,
-		DuckDBDataProtocol.BROWSER_FILEREADER,
-		true
-	);
+	// const pq_data = await fetch('/api/blob_data');
+	// const pq_data_blob = await pq_data.blob();
+	// console.log(pq_data_blob);
+	// const parquetFile = new File([pq_data_blob], 'pq_file');
+	// await duckdb.registerFileHandle(
+	// 	'resale.parquet',
+	// 	parquetFile,
+	// 	DuckDBDataProtocol.BROWSER_FILEREADER,
+	// 	true
+	// );
 
 	const another_data = await fetch('/api/blob_data');
 	const pq_data_array = new Uint8Array(await another_data.arrayBuffer());
@@ -23,17 +23,33 @@ export async function load({ fetch }) {
 
 	const c = await duckdb.connect();
 	await c.query(`
-			CREATE TABLE IF NOT EXISTS duplicated AS
-			SELECT * FROM 'pq_file_buffer.parquet' UNION ALL SELECT * FROM 'resale.parquet';
+			CREATE TABLE IF NOT EXISTS resale_hdb AS
+			SELECT * FROM 'pq_file_buffer.parquet';
 		`);
-	const res = await c.query(`
+	const schema = await c.query(`SELECT * FROM resale_hdb LIMIT 10;`);
+	console.log(schema);
+	const avg_cost_per_month = await c.query(`
             SELECT 
 				month, 
 				avg(CAST(resale_price AS INTEGER)) AS avg_cost 
-			FROM duplicated
+			FROM resale_hdb
 			WHERE town = 'YISHUN' 
 			GROUP BY month
+			ORDER BY month
 			;
         `);
-	return { result: res };
+	const median_cost_per_month_per_town = await c.query(`
+            SELECT 
+				town,
+				month, 
+				percentile_cont(0.5) WITHIN GROUP (ORDER BY resale_price) AS median_cost 
+			FROM resale_hdb
+			GROUP BY town, month
+			ORDER BY town, month
+			;
+	`);
+	return {
+		avg_cost_per_month: avg_cost_per_month,
+		median_cost_per_month_per_town: median_cost_per_month_per_town
+	};
 }
