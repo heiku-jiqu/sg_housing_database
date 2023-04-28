@@ -40,7 +40,8 @@
 		style: {
 			backgroundColor: 'transparent',
 			width: '1200px'
-		}
+		},
+		grid: true
 	}}
 />
 
@@ -63,6 +64,7 @@
 		style: {
 			width: '1200px',
 			backgroundColor: 'transparent'
-		}
+		},
+		grid: true
 	}}
 />
