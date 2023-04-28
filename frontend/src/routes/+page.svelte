@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Echarts from '$lib/Echarts.svelte';
+	import ObsPlot from '$lib/ObsPlot.svelte';
 	export let data;
 
 	$: opt = {
@@ -25,3 +26,5 @@
 </script>
 
 <Echarts options={opt} />
+
+<ObsPlot chartData={data.result.toArray().map((x) => ({ ...x, month: new Date(x.month) }))} />
