@@ -121,13 +121,13 @@ if __name__ == "__main__":
         pa_table3.cast(JAN1990_TO_DEC2014_PA_SCHEMA)
     )
     print("fetching JAN2000 TO FEB2012 Data")
-    res4 = request_resale_hdb_data(ResourceID.MAR2012_TO_DEC2014)
+    res4 = request_resale_hdb_data(ResourceID.JAN2000_TO_FEB2012)
     pa_table4 = Table.from_pylist(res4.json()["result"]["records"])
     pa_table4_dict_encoded = dict_encode_cols(
         pa_table4.cast(JAN1990_TO_DEC2014_PA_SCHEMA)
     )
     print("fetching JAN1990 TO DEC1999 Data")
-    res5 = request_resale_hdb_data(ResourceID.MAR2012_TO_DEC2014)
+    res5 = request_resale_hdb_data(ResourceID.JAN1990_TO_JAN1999)
     pa_table5 = Table.from_pylist(res5.json()["result"]["records"])
     pa_table5_dict_encoded = dict_encode_cols(
         pa_table5.cast(JAN1990_TO_DEC2014_PA_SCHEMA)
