@@ -1,7 +1,6 @@
 <script lang="ts">
+	import Echarts from '$lib/Echarts.svelte';
 	import { initDB } from '$lib/duckdb';
-	import { chart } from '$lib/echarts';
-	import { detach_before_dev, onMount } from 'svelte/internal';
 	import { DuckDBDataProtocol } from '@duckdb/duckdb-wasm';
 	async function load_db() {
 		const duckdb = await initDB();
@@ -60,10 +59,8 @@
 <p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
 
 {#await result_promise then table}
-	<div
-		style:height="600px"
-		style:width="1200px"
-		use:chart={{
+	<Echarts
+		options={{
 			dataset: {
 				source: table.toArray()
 			},
