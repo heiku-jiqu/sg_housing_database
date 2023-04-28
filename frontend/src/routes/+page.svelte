@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Echarts from '$lib/Echarts.svelte';
-	import ObsPlot from '$lib/ObsPlot.svelte';
+	import Echarts from '$lib/components/Echarts.svelte';
+	import ObsPlot from '$lib/components/ObsPlot.svelte';
 	export let data;
 
 	$: opt = {

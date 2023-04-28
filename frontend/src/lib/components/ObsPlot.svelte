@@ -3,7 +3,6 @@
 	import { onMount } from 'svelte';
 
 	export let chartData;
-	console.log(chartData);
 	export let plotOpt: Plot.PlotOptions = {
 		marks: [Plot.line(chartData, { x: 'month', y: 'avg_cost' })],
 		marginLeft: 70,
