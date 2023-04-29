@@ -38,6 +38,7 @@ export async function load({ fetch }) {
 			ORDER BY month
 			;
         `);
+
 	const median_cost_per_month_per_town = await c.query(`
             SELECT 
 				town,
@@ -46,6 +47,18 @@ export async function load({ fetch }) {
 			FROM resale_hdb
 			GROUP BY town, month
 			ORDER BY town, month
+			;
+	`);
+
+	const cost_per_month_per_storey_range = await c.query(`
+            SELECT 
+				town,
+				month, 
+				percentile_cont(0.5) WITHIN GROUP (ORDER BY resale_price) AS median_cost,
+				avg(resale_price) AS avg_cost 
+			FROM resale_hdb
+			GROUP BY storey_range, month
+			ORDER BY storey_range, month
 			;
 	`);
 	return {
