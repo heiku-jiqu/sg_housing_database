@@ -61,6 +61,14 @@ export async function load({ fetch }) {
 			ORDER BY storey_range, month
 			;
 	`);
+
+	const vol_per_month = await c.query(`
+		SELECT
+			COUNT(*) as volume
+		FROM resale_hdb
+		GROUP BY month
+		ORDER BY month
+	`);
 	return {
 		avg_cost_per_month: avg_cost_per_month,
 		median_cost_per_month_per_town: median_cost_per_month_per_town
