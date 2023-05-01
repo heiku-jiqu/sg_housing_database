@@ -52,10 +52,10 @@ export async function load({ fetch }) {
 
 	const cost_per_month_per_storey_range = await c.query(`
             SELECT 
-				town,
+				storey_range,
 				month, 
 				percentile_cont(0.5) WITHIN GROUP (ORDER BY resale_price) AS median_cost,
-				avg(resale_price) AS avg_cost 
+				avg(resale_price) AS avg_cost
 			FROM resale_hdb
 			GROUP BY storey_range, month
 			ORDER BY storey_range, month
@@ -69,6 +69,9 @@ export async function load({ fetch }) {
 		GROUP BY month
 		ORDER BY month
 	`);
+
+	// use prepared statements
+	// use CUBE sql function
 	return {
 		avg_cost_per_month: avg_cost_per_month,
 		median_cost_per_month_per_town: median_cost_per_month_per_town
