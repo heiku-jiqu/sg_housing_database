@@ -43,7 +43,8 @@ export async function load({ fetch }) {
             SELECT 
 				town,
 				month, 
-				percentile_cont(0.5) WITHIN GROUP (ORDER BY resale_price) AS median_cost 
+				percentile_cont(0.5) WITHIN GROUP (ORDER BY resale_price) AS median_cost,
+				dense_rank() OVER (ORDER BY town) AS facet_key
 			FROM resale_hdb
 			GROUP BY town, month
 			ORDER BY town, month
@@ -55,7 +56,8 @@ export async function load({ fetch }) {
 				storey_range,
 				month, 
 				percentile_cont(0.5) WITHIN GROUP (ORDER BY resale_price) AS median_cost,
-				avg(resale_price) AS avg_cost
+				avg(resale_price) AS avg_cost,
+				dense_rank() OVER (ORDER BY storey_range) AS facet_key
 			FROM resale_hdb
 			GROUP BY storey_range, month
 			ORDER BY storey_range, month
@@ -74,6 +76,8 @@ export async function load({ fetch }) {
 	// use CUBE sql function
 	return {
 		avg_cost_per_month: avg_cost_per_month,
-		median_cost_per_month_per_town: median_cost_per_month_per_town
+		median_cost_per_month_per_town: median_cost_per_month_per_town,
+		cost_per_month_per_storey_range: cost_per_month_per_storey_range,
+		vol_per_month: vol_per_month
 	};
 }
