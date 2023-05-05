@@ -3,8 +3,10 @@
 	import ObsPlot from '$lib/components/ObsPlot.svelte';
 	import * as Plot from '@observablehq/plot';
 	export let data;
+</script>
 
-	$: opt = {
+<Echarts
+	options={{
 		dataset: {
 			source: data.avg_cost_per_month.toArray()
 		},
@@ -23,10 +25,8 @@
 			}
 		],
 		tooltip: { show: true }
-	};
-</script>
-
-<Echarts options={opt} />
+	}}
+/>
 
 <ObsPlot
 	plotOpt={{
