@@ -9,15 +9,25 @@ export async function load({ fetch }) {
 
 	const another_data = await fetch('/api/blob_data/hdb');
 	const pq_data_array = new Uint8Array(await another_data.arrayBuffer());
+
+	const priv_resi_data = await fetch('/api/blob_data/private');
+	const pq_priv_resi_array = new Uint8Array(await priv_resi_data.arrayBuffer());
+
 	await duckdb.registerFileBuffer('pq_file_buffer.parquet', pq_data_array);
+	await duckdb.registerFileBuffer('pq_priv_resi.parquet', pq_priv_resi_array);
 
 	const c = await duckdb.connect();
 	await c.query(`
 			CREATE TABLE IF NOT EXISTS resale_hdb AS
 			SELECT * FROM 'pq_file_buffer.parquet';
 		`);
-	const schema = await c.query(`SELECT * FROM resale_hdb LIMIT 10;`);
-	console.log(schema);
+	await c.query(`
+			CREATE TABLE IF NOT EXISTS private_resi AS
+			SELECT * FROM 'pq_priv_resi.parquet';
+		`);
+
+	console.log((await c.query(`SELECT * FROM private_resi LIMIT 10;`)).schema);
+	console.log((await c.query(`SELECT * FROM resale_hdb LIMIT 10;`)).schema);
 	const avg_cost_per_month = await c.query(`
             SELECT 
 				month, 
