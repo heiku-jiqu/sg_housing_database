@@ -7,10 +7,13 @@ export const ssr = false;
 export async function load({ fetch }) {
 	const duckdb = await initDB();
 
-	const another_data = await fetch('/api/blob_data/hdb');
+	const [another_data, priv_resi_data] = await Promise.all([
+		fetch('/api/blob_data/hdb'),
+		fetch('/api/blob_data/private')
+	]);
+
 	const pq_data_array = new Uint8Array(await another_data.arrayBuffer());
 
-	const priv_resi_data = await fetch('/api/blob_data/private');
 	const pq_priv_resi_array = new Uint8Array(await priv_resi_data.arrayBuffer());
 
 	await duckdb.registerFileBuffer('pq_file_buffer.parquet', pq_data_array);
