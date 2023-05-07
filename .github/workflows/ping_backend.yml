@@ -3,6 +3,8 @@ run-name: Pinging backend aliveness
 on:
   schedule:
     - cron: '44 10 * * 0,4'
+  workflow_dispatch:
+    
 env:
   supabase_endpoint: ${{ secrets.SUPABASE_ENDPOINT }}
   supabase_anon_key: ${{ secrets.SUPABASE_ANON_KEY }}
