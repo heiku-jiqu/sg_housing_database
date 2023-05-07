@@ -17,7 +17,7 @@ export async function load({ fetch }) {
 	// 	true
 	// );
 
-	const another_data = await fetch('/api/blob_data');
+	const another_data = await fetch('/api/blob_data/hdb');
 	const pq_data_array = new Uint8Array(await another_data.arrayBuffer());
 	await duckdb.registerFileBuffer('pq_file_buffer.parquet', pq_data_array);
 
