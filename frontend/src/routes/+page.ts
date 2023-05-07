@@ -6,16 +6,6 @@ export const ssr = false;
 
 export async function load({ fetch }) {
 	const duckdb = await initDB();
-	// const pq_data = await fetch('/api/blob_data');
-	// const pq_data_blob = await pq_data.blob();
-	// console.log(pq_data_blob);
-	// const parquetFile = new File([pq_data_blob], 'pq_file');
-	// await duckdb.registerFileHandle(
-	// 	'resale.parquet',
-	// 	parquetFile,
-	// 	DuckDBDataProtocol.BROWSER_FILEREADER,
-	// 	true
-	// );
 
 	const another_data = await fetch('/api/blob_data/hdb');
 	const pq_data_array = new Uint8Array(await another_data.arrayBuffer());
