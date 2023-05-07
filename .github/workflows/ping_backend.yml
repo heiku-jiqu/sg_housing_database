@@ -1,0 +1,13 @@
+name: ping_backend
+run-name: Pinging backend aliveness
+on:
+  schedule:
+    - cron: '10 44 * * 0,4'
+env:
+  supabase_endpoint: ${{ secrets.SUPABASE_ENDPOINT }}
+  supabase_anon_key: ${{ secrets.SUPABASE_ANON_KEY }}
+jobs:
+  curl:
+    runs-on: ubuntu-latest
+    steps:
+    - run: curl ${{secrets.SUPABASE_ENDPOINT}} -H 'apikey:${{secrets.SUPABASE_ANON_KEY}}'
