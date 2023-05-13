@@ -8,5 +8,8 @@ on:
 jobs:
   curl:
     runs-on: ubuntu-latest
+    env:
+      SUPABASE_ENDPOINT: ${{secrets.SUPABASE_ENDPOINT}}
+      SUPABASE_ANON_KEY: ${{secrets.SUPABASE_ANON_KEY}}
     steps:
-    - run: curl ${{secrets.SUPABASE_ENDPOINT}} -H 'apikey:${{secrets.SUPABASE_ANON_KEY}}'
+    - run: curl "$SUPABASE_ENDPOINT" -H "apikey:$SUPABASE_ANON_KEY"
