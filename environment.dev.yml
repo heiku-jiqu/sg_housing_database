@@ -6,5 +6,6 @@ dependencies:
   - pandas
   - requests
   - zstandard
-  - pyarrow=11.0.0
   - black
+  - pip:
+    - pyarrow=11.0.0
