@@ -2,7 +2,7 @@ name: process_data
 run-name: Processing HDB and Private Residential Data
 on:
   schedule:
-    - cron: '44 10 28 * *'
+    - cron: '22 10 * * 6' # every sat 10:22am
   workflow_dispatch:
     
 jobs:
