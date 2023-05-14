@@ -1,0 +1,24 @@
+name: process_data
+run-name: Processing HDB and Private Residential Data
+on:
+  schedule:
+    - cron: '44 10 28 * *'
+  workflow_dispatch:
+    
+jobs:
+  ETL:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_ENDPOINT: ${{secrets.SUPABASE_ENDPOINT}}
+      SUPABASE_SERVICE_KEY: ${{secrets.SUPABASE_SERVICE_KEY}}
+      URA_ACCESS_KEY: ${{secrets.URA_ACCESS_KEY}}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+        activate-environment: sg_housing_database
+        environment-file: environment.prod.yml
+        python-version: 3.7
+        auto-activate-base: false
+    - run:
+        python main.py
