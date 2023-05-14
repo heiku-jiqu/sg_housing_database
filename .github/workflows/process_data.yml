@@ -20,5 +20,8 @@ jobs:
         environment-file: environment.prod.yml
         python-version: 3.7
         auto-activate-base: false
+    - run: |
+        conda info
+        conda list
     - run:
         python main.py
