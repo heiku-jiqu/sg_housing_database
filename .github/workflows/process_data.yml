@@ -8,6 +8,9 @@ on:
 jobs:
   ETL:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}
     env:
       SUPABASE_ENDPOINT: ${{secrets.SUPABASE_ENDPOINT}}
       SUPABASE_SERVICE_KEY: ${{secrets.SUPABASE_SERVICE_KEY}}
