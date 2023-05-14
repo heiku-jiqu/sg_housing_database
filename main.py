@@ -5,10 +5,12 @@ import pyarrow as pa
 from pyarrow import Table
 import pyarrow.parquet as pq
 from io import BytesIO
+import os
 
 
 if __name__ == "__main__":
-    access_key = read_access_key_json()
+    print("Processing Private Residential Data")
+    access_key = os.environ.get("URA_ACCESS_KEY", read_access_key_json())
     headers = {
         "AccessKey": access_key,
         "User-Agent": "PostmanRuntime/7.29.0",  # IMPORTANT: explicitly set user-agent if not API wont work!
@@ -34,6 +36,7 @@ if __name__ == "__main__":
     )
     print(res.content)
 
+    print("Processing HDB Resale Data")
     hdb_req = [request_resale_hdb_data(e) for e in ResourceID]
     pa_tables = [Table.from_pylist(r.json()["result"]["records"]) for r in hdb_req]
     encoded_hdb_tables = []
