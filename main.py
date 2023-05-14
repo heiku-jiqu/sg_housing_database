@@ -10,7 +10,9 @@ import os
 
 if __name__ == "__main__":
     print("Processing Private Residential Data")
-    access_key = os.environ.get("URA_ACCESS_KEY", read_access_key_json())
+    access_key = os.environ.get("URA_ACCESS_KEY")
+    if access_key is None:
+        access_key = read_access_key_json()
     headers = {
         "AccessKey": access_key,
         "User-Agent": "PostmanRuntime/7.29.0",  # IMPORTANT: explicitly set user-agent if not API wont work!
