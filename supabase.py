@@ -3,11 +3,17 @@ import requests
 import json
 from io import BytesIO, RawIOBase
 import pyarrow.parquet as pq
+import os
 
 
 def get_supabase_configs():
-    with open("config/keys.json") as f:
-        return json.load(f)["supabase"]
+    endpoint = os.environ.get("SUPABASE_ENDPOINT")
+    service_key = os.environ.get("SUPABASE_SERVICE_KEY")
+    if endpoint and service_key:
+        return {"config": {"service_key": service_key}, "endpoint": endpoint}
+    else:
+        with open("config/keys.json") as f:
+            return json.load(f)["supabase"]
 
 
 def download_file_from_supabase(
@@ -62,7 +68,6 @@ def list_files_from_supabase_bucket(
 
 
 if __name__ == "__main__":
-
     configs = get_supabase_configs()
     bucket = "sg-housing-db"
 
