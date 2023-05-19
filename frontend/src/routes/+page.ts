@@ -69,6 +69,7 @@ export async function load({ fetch }) {
 
 	const vol_per_month = await c.query(`
 		SELECT
+			month,
 			COUNT(*) as volume
 		FROM resale_hdb
 		GROUP BY month
