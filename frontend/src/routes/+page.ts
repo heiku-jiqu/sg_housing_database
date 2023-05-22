@@ -31,7 +31,7 @@ export async function load({ fetch }) {
 
 	console.log((await c.query(`SELECT * FROM private_resi LIMIT 10;`)).schema);
 	console.log((await c.query(`SELECT * FROM resale_hdb LIMIT 10;`)).schema);
-	const avg_cost_per_month = await c.query(`
+	const avg_cost_per_month = c.query(`
             SELECT 
 				month, 
 				avg(CAST(resale_price AS INTEGER)) AS avg_cost 
@@ -42,7 +42,7 @@ export async function load({ fetch }) {
 			;
         `);
 
-	const median_cost_per_month_per_town = await c.query(`
+	const median_cost_per_month_per_town = c.query(`
             SELECT 
 				town,
 				month, 
@@ -54,7 +54,7 @@ export async function load({ fetch }) {
 			;
 	`);
 
-	const cost_per_month_per_storey_range = await c.query(`
+	const cost_per_month_per_storey_range = c.query(`
             SELECT 
 				storey_range,
 				month, 
@@ -67,7 +67,7 @@ export async function load({ fetch }) {
 			;
 	`);
 
-	const vol_per_month = await c.query(`
+	const vol_per_month = c.query(`
 		SELECT
 			month,
 			COUNT(*) as volume
@@ -79,9 +79,9 @@ export async function load({ fetch }) {
 	// use prepared statements
 	// use CUBE sql function
 	return {
-		avg_cost_per_month: avg_cost_per_month,
-		median_cost_per_month_per_town: median_cost_per_month_per_town,
-		cost_per_month_per_storey_range: cost_per_month_per_storey_range,
-		vol_per_month: vol_per_month
+		avg_cost_per_month: await avg_cost_per_month,
+		median_cost_per_month_per_town: await median_cost_per_month_per_town,
+		cost_per_month_per_storey_range: await cost_per_month_per_storey_range,
+		vol_per_month: await vol_per_month
 	};
 }
