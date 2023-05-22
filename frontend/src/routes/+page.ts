@@ -1,5 +1,6 @@
 import { initDB } from '$lib/duckdb';
 import { DuckDBDataProtocol } from '@duckdb/duckdb-wasm';
+import type { DataType, Type } from 'apache-arrow';
 
 // need render on client because WebWorker is clientside only
 export const ssr = false;
@@ -31,7 +32,10 @@ export async function load({ fetch }) {
 
 	console.log((await c.query(`SELECT * FROM private_resi LIMIT 10;`)).schema);
 	console.log((await c.query(`SELECT * FROM resale_hdb LIMIT 10;`)).schema);
-	const avg_cost_per_month = c.query(`
+	const avg_cost_per_month = c.query<{
+		month: DataType<Type.Utf8>;
+		avg_cost: DataType<Type.Float32>;
+	}>(`
             SELECT 
 				month, 
 				avg(CAST(resale_price AS INTEGER)) AS avg_cost 
