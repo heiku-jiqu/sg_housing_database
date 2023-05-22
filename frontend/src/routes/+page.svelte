@@ -44,6 +44,28 @@
 		grid: true
 	}}
 />
+<ObsPlot
+	plotOpt={{
+		marks: [
+			Plot.rectY(
+				data.vol_per_month.toArray().map((x) => ({ ...x, month: new Date(x.month) })),
+				{
+					x: 'month',
+					y2: 'volume',
+					fill: 'black',
+					interval: 'month',
+					insetLeft: 0.1,
+					insetRight: 0.1
+				}
+			)
+		],
+		marginLeft: 70,
+		style: {
+			width: '1200px',
+			backgroundColor: 'transparent'
+		}
+	}}
+/>
 
 <ObsPlot
 	plotOpt={{
@@ -89,27 +111,5 @@
 		grid: true,
 		fx: { axis: null },
 		fy: { axis: null }
-	}}
-/>
-
-<ObsPlot
-	plotOpt={{
-		marks: [
-			Plot.rectY(
-				data.vol_per_month.toArray().map((x) => ({ ...x, month: new Date(x.month) })),
-				{
-					x: 'month',
-					y2: 'volume',
-					fill: 'black',
-					interval: 'month',
-					insetLeft: 0.1,
-					insetRight: 0.1
-				}
-			)
-		],
-		style: {
-			width: '1200px',
-			backgroundColor: 'transparent'
-		}
 	}}
 />
