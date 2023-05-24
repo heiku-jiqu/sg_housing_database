@@ -3,35 +3,14 @@
 	import ObsPlot from '$lib/components/ObsPlot.svelte';
 	import AvgPrice from '$lib/components/plots/AvgPrice.svelte';
 	import AvgPriceEcharts from '$lib/components/plots/AvgPriceEcharts.svelte';
+	import TransactionVolume from '$lib/components/plots/TransactionVolume.svelte';
 	import * as Plot from '@observablehq/plot';
 	export let data;
 </script>
 
-
-<AvgPriceEcharts/>
+<AvgPriceEcharts />
 <AvgPrice />
-<ObsPlot
-	plotOpt={{
-		marks: [
-			Plot.rectY(
-				data.vol_per_month.toArray().map((x) => ({ ...x, month: new Date(x.month) })),
-				{
-					x: 'month',
-					y2: 'volume',
-					fill: 'black',
-					interval: 'month',
-					insetLeft: 0.1,
-					insetRight: 0.1
-				}
-			)
-		],
-		marginLeft: 70,
-		style: {
-			width: '1200px',
-			backgroundColor: 'transparent'
-		}
-	}}
-/>
+<TransactionVolume />
 
 <ObsPlot
 	plotOpt={{

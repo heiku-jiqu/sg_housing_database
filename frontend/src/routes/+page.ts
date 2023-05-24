@@ -57,15 +57,6 @@ export async function load({ fetch }) {
 			;
 	`);
 
-	const vol_per_month = c.query(`
-		SELECT
-			month,
-			COUNT(*) as volume
-		FROM resale_hdb
-		GROUP BY month
-		ORDER BY month
-	`);
-
 	// use prepared statements
 	// use CUBE sql function
 	return {
