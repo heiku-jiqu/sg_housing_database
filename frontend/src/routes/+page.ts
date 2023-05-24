@@ -32,17 +32,6 @@ export async function load({ fetch }) {
 
 	// console.log((await c.query(`SELECT * FROM private_resi LIMIT 10;`)).schema);
 	// console.log((await c.query(`SELECT * FROM resale_hdb LIMIT 10;`)).schema);
-	const median_cost_per_month_per_town = c.query(`
-            SELECT 
-				town,
-				month, 
-				percentile_cont(0.5) WITHIN GROUP (ORDER BY resale_price) AS median_cost,
-				dense_rank() OVER (ORDER BY town) AS facet_key
-			FROM resale_hdb
-			GROUP BY town, month
-			ORDER BY town, month
-			;
-	`);
 
 	const cost_per_month_per_storey_range = c.query(`
             SELECT 
@@ -60,7 +49,6 @@ export async function load({ fetch }) {
 	// use prepared statements
 	// use CUBE sql function
 	return {
-		median_cost_per_month_per_town: await median_cost_per_month_per_town,
-		cost_per_month_per_storey_range: await cost_per_month_per_storey_range,
+		cost_per_month_per_storey_range: await cost_per_month_per_storey_range
 	};
 }
