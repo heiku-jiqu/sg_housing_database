@@ -62,6 +62,5 @@ export async function load({ fetch }) {
 	return {
 		median_cost_per_month_per_town: await median_cost_per_month_per_town,
 		cost_per_month_per_storey_range: await cost_per_month_per_storey_range,
-		vol_per_month: await vol_per_month
 	};
 }
