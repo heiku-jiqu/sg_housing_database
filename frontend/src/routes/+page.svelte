@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Echarts from '$lib/components/Echarts.svelte';
 	import ObsPlot from '$lib/components/ObsPlot.svelte';
+	import AvgPrice from '$lib/components/plots/AvgPrice.svelte';
 	import * as Plot from '@observablehq/plot';
 	export let data;
 </script>
@@ -28,22 +29,7 @@
 	}}
 />
 
-<ObsPlot
-	plotOpt={{
-		marks: [
-			Plot.line(
-				data.avg_cost_per_month.toArray().map((x) => ({ ...x, month: new Date(x.month) })),
-				{ x: 'month', y: 'avg_cost' }
-			)
-		],
-		marginLeft: 70,
-		style: {
-			backgroundColor: 'transparent',
-			width: '1200px'
-		},
-		grid: true
-	}}
-/>
+<AvgPrice />
 <ObsPlot
 	plotOpt={{
 		marks: [
