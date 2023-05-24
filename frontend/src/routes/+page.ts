@@ -32,20 +32,6 @@ export async function load({ fetch }) {
 
 	// console.log((await c.query(`SELECT * FROM private_resi LIMIT 10;`)).schema);
 	// console.log((await c.query(`SELECT * FROM resale_hdb LIMIT 10;`)).schema);
-	const avg_cost_per_month = c.query<{
-		month: DataType<Type.Utf8>;
-		avg_cost: DataType<Type.Float32>;
-	}>(`
-            SELECT 
-				month, 
-				avg(CAST(resale_price AS INTEGER)) AS avg_cost 
-			FROM resale_hdb
-			WHERE town = 'YISHUN' 
-			GROUP BY month
-			ORDER BY month
-			;
-        `);
-
 	const median_cost_per_month_per_town = c.query(`
             SELECT 
 				town,
@@ -83,7 +69,6 @@ export async function load({ fetch }) {
 	// use prepared statements
 	// use CUBE sql function
 	return {
-		avg_cost_per_month: await avg_cost_per_month,
 		median_cost_per_month_per_town: await median_cost_per_month_per_town,
 		cost_per_month_per_storey_range: await cost_per_month_per_storey_range,
 		vol_per_month: await vol_per_month
