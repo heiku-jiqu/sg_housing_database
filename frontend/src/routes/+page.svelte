@@ -2,33 +2,13 @@
 	import Echarts from '$lib/components/Echarts.svelte';
 	import ObsPlot from '$lib/components/ObsPlot.svelte';
 	import AvgPrice from '$lib/components/plots/AvgPrice.svelte';
+	import AvgPriceEcharts from '$lib/components/plots/AvgPriceEcharts.svelte';
 	import * as Plot from '@observablehq/plot';
 	export let data;
 </script>
 
-<Echarts
-	options={{
-		dataset: {
-			source: data.avg_cost_per_month.toArray()
-		},
-		title: {
-			text: 'ECharts Getting Started Example'
-		},
-		xAxis: { type: 'category' },
-		yAxis: {},
-		series: [
-			{
-				type: 'scatter',
-				encode: {
-					x: 'month',
-					y: 'avg_cost'
-				}
-			}
-		],
-		tooltip: { show: true }
-	}}
-/>
 
+<AvgPriceEcharts/>
 <AvgPrice />
 <ObsPlot
 	plotOpt={{
