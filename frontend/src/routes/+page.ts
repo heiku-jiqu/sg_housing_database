@@ -30,8 +30,8 @@ export async function load({ fetch }) {
 			SELECT * FROM 'pq_priv_resi.parquet';
 		`);
 
-	console.log((await c.query(`SELECT * FROM private_resi LIMIT 10;`)).schema);
-	console.log((await c.query(`SELECT * FROM resale_hdb LIMIT 10;`)).schema);
+	// console.log((await c.query(`SELECT * FROM private_resi LIMIT 10;`)).schema);
+	// console.log((await c.query(`SELECT * FROM resale_hdb LIMIT 10;`)).schema);
 	const avg_cost_per_month = c.query<{
 		month: DataType<Type.Utf8>;
 		avg_cost: DataType<Type.Float32>;
