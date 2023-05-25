@@ -33,7 +33,7 @@
 			marks: [
 				Plot.line(
 					avg_cost_per_month.toArray().map((x) => ({ ...x, month: new Date(x.month) })),
-					{ x: 'month', y: 'avg_cost' }
+					{ x: 'month', y: 'avg_cost', tip: true }
 				)
 			],
 			marginLeft: 70,

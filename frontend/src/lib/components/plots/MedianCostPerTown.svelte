@@ -36,6 +36,7 @@
 						y: 'median_cost',
 						stroke: 'town',
 						strokeOpacity: 0.5,
+						tip: true,
 						fy: (d) => Math.floor((Number(d.facet_key) - 1) / 3),
 						fx: (d) => (Number(d.facet_key) - 1) % 3
 					}

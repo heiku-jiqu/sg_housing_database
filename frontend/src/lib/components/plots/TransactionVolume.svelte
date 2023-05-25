@@ -37,7 +37,8 @@
 						fill: 'black',
 						interval: 'month',
 						insetLeft: 0.1,
-						insetRight: 0.1
+						insetRight: 0.1,
+						tip: true
 					}
 				)
 			],
