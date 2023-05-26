@@ -14,8 +14,8 @@
 	h1::before {
 		content: '';
 		position: absolute;
-		left: 1.2rem;
-		top: 4.7rem;
+		left: 1.7rem;
+		top: 3.7rem;
 		width: 3.2rem;
 		border-bottom: 4px solid blue;
 	}
