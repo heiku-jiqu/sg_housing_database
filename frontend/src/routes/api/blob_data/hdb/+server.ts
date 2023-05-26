@@ -12,6 +12,8 @@ export async function GET({ url }) {
 			status: 500
 		});
 	} else {
-		return new Response(data, { headers: { 'Content-Type': 'application/octet-stream' } });
+		return new Response(data, {
+			headers: { 'Content-Type': 'application/octet-stream', 'cache-control': 'max-age=14400' }
+		});
 	}
 }
