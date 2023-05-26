@@ -15,7 +15,6 @@
 				month, 
 				avg(CAST(resale_price AS INTEGER)) AS avg_cost 
 			FROM resale_hdb
-			WHERE town = 'YISHUN' 
 			GROUP BY month
 			ORDER BY month
 			;
