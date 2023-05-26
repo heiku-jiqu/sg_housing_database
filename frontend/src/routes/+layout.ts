@@ -49,6 +49,7 @@ export async function load({ fetch }) {
 	// use prepared statements
 	// use CUBE sql function
 	return {
+		duckdb_conn: c,
 		cost_per_month_per_storey_range: await cost_per_month_per_storey_range
 	};
 }
