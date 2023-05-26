@@ -8,6 +8,15 @@
 
 <style>
 	h1 {
+		margin-top: 0;
 		font-size: 2.5rem;
+	}
+	h1::before {
+		content: '';
+		position: absolute;
+		left: 1.2rem;
+		top: 4.7rem;
+		width: 3.2rem;
+		border-bottom: 4px solid blue;
 	}
 </style>
