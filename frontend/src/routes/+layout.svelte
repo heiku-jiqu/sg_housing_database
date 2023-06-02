@@ -33,6 +33,7 @@
 
 {#await promise then}
 	<slot />
+	<a href="/using_store">go to</a>
 {/await}
 
 <style>

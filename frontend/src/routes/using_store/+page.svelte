@@ -2,16 +2,13 @@
 	import { priv_resi_store } from '$lib/stores';
 	import { readable_query_res } from '$lib/components/plots/store';
 
-	async function hello() {
-		console.log('initing');
-		await readable_query_res.init();
+	if (!$readable_query_res) {
+		const promise = readable_query_res.init();
 	}
-
-	hello();
 </script>
 
-{#if $readable_query_res}
+<a href="/">back to root</a>
+<br />
+{#await $readable_query_res then}
 	{$readable_query_res}
-{:else}
-	<p>dogshit</p>
-{/if}
+{/await}
