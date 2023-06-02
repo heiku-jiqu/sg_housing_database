@@ -1,10 +1,15 @@
-import { writable } from 'svelte/store';
+import { writable, type Writable } from 'svelte/store';
 import type { Table, DataType, Type } from 'apache-arrow';
 import { initDB } from '$lib/duckdb';
 // import type { Table } from '@duckdb/duckdb-wasm';
 
 export function createQueryStore() {
-	const { subscribe, set } = writable();
+	const { subscribe, set } = writable<
+		Table<{
+			month: DataType<Type.Utf8>;
+			avg_cost: DataType<Type.Float32>;
+		}>
+	>();
 
 	return {
 		subscribe,
@@ -36,3 +41,12 @@ export const query_res = writable<
 >();
 
 export const readable_query_res = createQueryStore();
+
+const data_store_object: { [store_name: string]: any } = {
+	store1: readable_query_res,
+	store2: createQueryStore(),
+	store3: createQueryStore()
+};
+
+data_store_object.store4 = createQueryStore();
+export { data_store_object };
