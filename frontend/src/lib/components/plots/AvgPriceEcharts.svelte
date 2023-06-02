@@ -19,6 +19,7 @@
 			ORDER BY month
 			;
         `);
+		query_res.set(avg_cost_per_month);
 		return avg_cost_per_month;
 	}
 	const promise = loadData();

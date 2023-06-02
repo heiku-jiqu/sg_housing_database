@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ObsPlot from '$lib/components/ObsPlot.svelte';
 	import { initDB } from '$lib/duckdb';
-	import type { DataType, Type } from 'apache-arrow';
+	import * as arrow from 'apache-arrow';
 	import * as Plot from '@observablehq/plot';
 	import { query_res } from './store';
 
@@ -9,8 +9,8 @@
 		const duckdb = await initDB();
 		const c = await duckdb.connect();
 		const avg_cost_per_month = await c.query<{
-			month: DataType<Type.Utf8>;
-			avg_cost: DataType<Type.Float32>;
+			month: arrow.DataType<arrow.Type.Utf8>;
+			avg_cost: arrow.DataType<arrow.Type.Float32>;
 		}>(`
             SELECT 
 				month, 
