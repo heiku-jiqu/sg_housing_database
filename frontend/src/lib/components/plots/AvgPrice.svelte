@@ -3,6 +3,7 @@
 	import { initDB } from '$lib/duckdb';
 	import type { DataType, Type } from 'apache-arrow';
 	import * as Plot from '@observablehq/plot';
+	import { query_res } from './store';
 
 	async function loadData() {
 		const duckdb = await initDB();
@@ -19,19 +20,18 @@
 			ORDER BY month
 			;
         `);
+		query_res.set(avg_cost_per_month);
 		return avg_cost_per_month;
 	}
 	const promise = loadData();
 </script>
 
-{#await promise}
-	<p>loading...</p>
-{:then avg_cost_per_month}
+{#if $query_res}
 	<ObsPlot
 		plotOpt={{
 			marks: [
 				Plot.line(
-					avg_cost_per_month.toArray().map((x) => ({ ...x, month: new Date(x.month) })),
+					$query_res.toArray().map((x) => ({ ...x, month: new Date(x.month) })),
 					{ x: 'month', y: 'avg_cost', tip: true }
 				)
 			],
@@ -43,6 +43,6 @@
 			grid: true
 		}}
 	/>
-{:catch error}
-	<p style="color:red">{error.message}</p>
-{/await}
+{:else}
+	<p>loading...</p>
+{/if}

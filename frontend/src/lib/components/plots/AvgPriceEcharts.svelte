@@ -2,6 +2,7 @@
 	import Echarts from '$lib/components/Echarts.svelte';
 	import { initDB } from '$lib/duckdb';
 	import type { DataType, Type } from 'apache-arrow';
+	import { query_res } from './store';
 
 	async function loadData() {
 		const duckdb = await initDB();
@@ -23,13 +24,11 @@
 	const promise = loadData();
 </script>
 
-{#await promise}
-	<p>loading...</p>
-{:then avg_cost_per_month}
+{#if $query_res}
 	<Echarts
 		options={{
 			dataset: {
-				source: avg_cost_per_month.toArray()
+				source: $query_res.toArray()
 			},
 			title: {
 				text: 'ECharts Getting Started Example'
@@ -48,6 +47,6 @@
 			tooltip: { show: true }
 		}}
 	/>
-{:catch error}
-	<p style="color:red">{error.message}</p>
-{/await}
+{:else}
+	<p>loading...</p>
+{/if}
