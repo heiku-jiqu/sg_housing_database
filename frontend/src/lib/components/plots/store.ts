@@ -19,12 +19,6 @@ export function createQueryStore<
 		}
 	};
 }
-export const query_res = writable<
-	Table<{
-		month: DataType<Type.Utf8>;
-		avg_cost: DataType<Type.Float32>;
-	}>
->();
 
 export const readable_query_res = createQueryStore<{
 	month: DataType<Type.Utf8>;
