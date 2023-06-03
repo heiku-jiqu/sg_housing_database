@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ObsPlot from '$lib/components/ObsPlot.svelte';
 	import * as Plot from '@observablehq/plot';
-	import { median_cost_per_month_per_town } from './store.ts';
+	import { median_cost_per_month_per_town } from './store';
 
 	if (!$median_cost_per_month_per_town) {
 		median_cost_per_month_per_town.init();
