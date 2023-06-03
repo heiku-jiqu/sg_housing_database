@@ -1,36 +1,21 @@
 <script lang="ts">
 	import ObsPlot from '$lib/components/ObsPlot.svelte';
-	import { initDB } from '$lib/duckdb';
-	import type { DataType, Type } from 'apache-arrow';
 	import * as Plot from '@observablehq/plot';
+	import { transaction_vol_store } from '$lib/components/plots/store';
 
-	async function loadData() {
-		const duckdb = await initDB();
-		const c = await duckdb.connect();
-		const vol_per_month = c.query<{
-			month: DataType<Type.Utf8>;
-			volume: DataType<Type.Int32>;
-		}>(`
-		SELECT
-			month,
-			COUNT(*) as volume
-		FROM resale_hdb
-		GROUP BY month
-		ORDER BY month
-	`);
-		return vol_per_month;
+	if (!$transaction_vol_store) {
+		transaction_vol_store.init();
 	}
-	const promise = loadData();
 </script>
 
-{#await promise}
+{#if !$transaction_vol_store}
 	<p>loading...</p>
-{:then vol_per_month}
+{:else}
 	<ObsPlot
 		plotOpt={{
 			marks: [
 				Plot.rectY(
-					vol_per_month.toArray().map((x) => ({ ...x, month: new Date(x.month) })),
+					$transaction_vol_store.toArray().map((x) => ({ ...x, month: new Date(x.month) })),
 					{
 						x: 'month',
 						y: 'volume',
@@ -41,7 +26,7 @@
 					}
 				),
 				Plot.tip(
-					vol_per_month.toArray().map((x) => ({ ...x, month: new Date(x.month) })),
+					$transaction_vol_store.toArray().map((x) => ({ ...x, month: new Date(x.month) })),
 					Plot.pointer({
 						x: 'month',
 						y: 'volume',
@@ -56,6 +41,4 @@
 			}
 		}}
 	/>
-{:catch error}
-	<p style="color:red">{error.message}</p>
-{/await}
+{/if}
