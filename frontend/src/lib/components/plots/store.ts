@@ -52,3 +52,20 @@ export const transaction_vol_store = createQueryStore<{
 	GROUP BY month
 	ORDER BY month
 `);
+
+export const median_cost_per_month_per_town = createQueryStore<{
+	town: DataType<Type.Utf8>;
+	month: DataType<Type.Utf8>;
+	median_cost: DataType<Type.Float32>;
+	facet_key: DataType<Type.Int32>;
+}>(`
+	SELECT 
+		town,
+		month, 
+		percentile_cont(0.5) WITHIN GROUP (ORDER BY resale_price) AS median_cost,
+		dense_rank() OVER (ORDER BY town) AS facet_key
+	FROM resale_hdb
+	GROUP BY town, month
+	ORDER BY town, month
+	;
+`);

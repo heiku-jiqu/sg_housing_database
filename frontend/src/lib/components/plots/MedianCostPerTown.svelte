@@ -1,36 +1,23 @@
 <script lang="ts">
 	import ObsPlot from '$lib/components/ObsPlot.svelte';
-	import { initDB } from '$lib/duckdb';
-	import type { DataType, Type } from 'apache-arrow';
 	import * as Plot from '@observablehq/plot';
+	import { median_cost_per_month_per_town } from './store.ts';
 
-	async function loadData() {
-		const duckdb = await initDB();
-		const c = await duckdb.connect();
-		const median_cost_per_month_per_town = c.query(`
-            SELECT 
-				town,
-				month, 
-				percentile_cont(0.5) WITHIN GROUP (ORDER BY resale_price) AS median_cost,
-				dense_rank() OVER (ORDER BY town) AS facet_key
-			FROM resale_hdb
-			GROUP BY town, month
-			ORDER BY town, month
-			;
-	`);
-		return median_cost_per_month_per_town;
+	if (!$median_cost_per_month_per_town) {
+		median_cost_per_month_per_town.init();
 	}
-	const promise = loadData();
 </script>
 
-{#await promise}
+{#if !$median_cost_per_month_per_town}
 	<p>loading...</p>
-{:then median_cost_per_month_per_town}
+{:else}
 	<ObsPlot
 		plotOpt={{
 			marks: [
 				Plot.line(
-					median_cost_per_month_per_town.toArray().map((x) => ({ ...x, month: new Date(x.month) })),
+					$median_cost_per_month_per_town
+						.toArray()
+						.map((x) => ({ ...x, month: new Date(x.month) })),
 					{
 						x: 'month',
 						y: 'median_cost',
@@ -44,7 +31,7 @@
 				Plot.text(
 					[
 						...new Map(
-							median_cost_per_month_per_town
+							$median_cost_per_month_per_town
 								.select(['town', 'facet_key'])
 								.toArray()
 								.map((x) => [x['town'], x])
@@ -71,6 +58,4 @@
 			fy: { axis: null }
 		}}
 	/>
-{:catch error}
-	<p style="color:red">{error.message}</p>
-{/await}
+{/if}
