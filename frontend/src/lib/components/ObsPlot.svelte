@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as Plot from '@observablehq/plot';
-	import { onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
 
 	export let plotOpt: Plot.PlotOptions;
 
@@ -9,4 +9,4 @@
 	}
 </script>
 
-<div use:plot />
+<div use:plot in:fade />
