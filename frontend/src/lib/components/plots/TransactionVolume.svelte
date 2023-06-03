@@ -33,13 +33,20 @@
 					vol_per_month.toArray().map((x) => ({ ...x, month: new Date(x.month) })),
 					{
 						x: 'month',
-						y2: 'volume',
+						y: 'volume',
 						fill: 'black',
 						interval: 'month',
 						insetLeft: 0.1,
-						insetRight: 0.1,
-						tip: true
+						insetRight: 0.1
 					}
+				),
+				Plot.tip(
+					vol_per_month.toArray().map((x) => ({ ...x, month: new Date(x.month) })),
+					Plot.pointer({
+						x: 'month',
+						y: 'volume',
+						anchor: 'bottom-left'
+					})
 				)
 			],
 			marginLeft: 70,
