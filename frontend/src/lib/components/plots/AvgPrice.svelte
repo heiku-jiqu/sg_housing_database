@@ -1,7 +1,5 @@
 <script lang="ts">
 	import ObsPlot from '$lib/components/ObsPlot.svelte';
-	import { initDB } from '$lib/duckdb';
-	import type { DataType, Type } from 'apache-arrow';
 	import * as Plot from '@observablehq/plot';
 	import { readable_query_res } from './store';
 

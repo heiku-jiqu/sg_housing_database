@@ -1,4 +1,6 @@
 <script>
+	// need render on client because WebWorker is clientside only
+	export const ssr = false;
 	import { initDB } from '$lib/duckdb';
 	import '../styles.css';
 	async function load_data() {

@@ -12,7 +12,6 @@ export function createQueryStore<
 	return {
 		subscribe,
 		init: async () => {
-			console.log('init store');
 			const duckdb = await initDB();
 			const c = await duckdb.connect();
 			const result = await c.query<T>(query);

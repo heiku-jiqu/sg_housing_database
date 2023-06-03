@@ -3,7 +3,6 @@
 	import AvgPriceEcharts from '$lib/components/plots/AvgPriceEcharts.svelte';
 	import TransactionVolume from '$lib/components/plots/TransactionVolume.svelte';
 	import MedianCostPerTown from '$lib/components/plots/MedianCostPerTown.svelte';
-	export let data;
 
 	const options = [
 		{ chartName: 'AvgPriceEcharts', component: AvgPriceEcharts },
@@ -15,7 +14,7 @@
 	let selected = options[0];
 </script>
 
-{#each options as option, key}
+{#each options as option}
 	<button class="tabNav" on:click={() => (selected = option)} class:selected={selected === option}>
 		{option.chartName}
 	</button>
