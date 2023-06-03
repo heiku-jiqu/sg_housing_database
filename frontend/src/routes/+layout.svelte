@@ -1,8 +1,11 @@
 <script>
-	// need render on client because WebWorker is clientside only
-	export const ssr = false;
 	import { initDB } from '$lib/duckdb';
 	import '../styles.css';
+	import {
+		transaction_vol_store,
+		median_cost_per_month_per_town,
+		readable_query_res
+	} from '$lib/components/plots/store';
 	async function load_data() {
 		const duckdb = await initDB();
 
@@ -29,6 +32,14 @@
 		`);
 	}
 	const promise = load_data();
+
+	// eagerly get query results
+
+	promise.then(() => {
+		transaction_vol_store.init();
+		median_cost_per_month_per_town.init();
+		readable_query_res.init();
+	});
 </script>
 
 <h1>Housing Prices Trend</h1>
