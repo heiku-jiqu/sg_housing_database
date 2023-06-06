@@ -62,3 +62,17 @@ export const median_cost_per_month_per_town = createQueryStore<{
 	ORDER BY town, month
 	;
 `);
+
+export const priv_residential_avg_cost = createQueryStore<{
+	month: DataType<Type.Utf8>;
+	avg_cost: DataType<Type.Float32>;
+}>(`
+	SELECT
+		strptime(contractDate, '%m%y') AS month,
+		-- contractDate AS month,
+		AVG(CAST(price AS INTEGER)) AS avg_cost
+	FROM private_resi_unnest
+	GROUP BY month
+	ORDER BY month
+	;
+`);
