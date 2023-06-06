@@ -6,6 +6,7 @@
 		median_cost_per_month_per_town,
 		readable_query_res
 	} from '$lib/components/plots/store';
+
 	async function load_data() {
 		const duckdb = await initDB();
 
@@ -29,6 +30,13 @@
 		await c.query(`
 			CREATE TABLE IF NOT EXISTS private_resi AS
 			SELECT * FROM 'pq_priv_resi.parquet';
+		`);
+		await c.query(`
+			CREATE TABLE IF NOT EXISTS private_resi_unnest AS
+			SELECT 
+				* EXCLUDE (transaction), 
+				UNNEST(transaction, recursive := TRUE)
+			FROM private_resi;
 		`);
 	}
 	const promise = load_data();
