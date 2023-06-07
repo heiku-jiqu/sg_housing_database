@@ -4,6 +4,7 @@
 	import {
 		transaction_vol_store,
 		median_cost_per_month_per_town,
+		readable_query_res,
 		priv_residential_avg_cost
 	} from '$lib/components/plots/store';
 
