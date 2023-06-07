@@ -39,6 +39,9 @@
 				UNNEST(transaction, recursive := TRUE)
 			FROM private_resi;
 		`);
+
+		// let x = await c.query(`SELECT * FROM private_resi_unnest LIMIT 10;`);
+		// console.table(JSON.parse(JSON.stringify(x.toArray())));
 	}
 	const promise = load_data();
 
