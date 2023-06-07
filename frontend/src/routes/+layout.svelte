@@ -4,7 +4,7 @@
 	import {
 		transaction_vol_store,
 		median_cost_per_month_per_town,
-		readable_query_res
+		priv_residential_avg_cost
 	} from '$lib/components/plots/store';
 
 	async function load_data() {
@@ -47,6 +47,7 @@
 		transaction_vol_store.init();
 		median_cost_per_month_per_town.init();
 		readable_query_res.init();
+		priv_residential_avg_cost.init();
 	});
 </script>
 
