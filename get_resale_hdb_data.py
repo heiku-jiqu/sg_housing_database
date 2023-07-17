@@ -27,6 +27,8 @@ def request_resale_hdb_data(resource_id: ResourceID = ResourceID.JAN2017_ONWARDS
     current_total = response_current_total.json()["result"]["total"]
     params.update(limit=current_total)
     response = requests.get(url=data_gov_url, params=params)
+    if not response.ok:
+        raise Exception("failed to request for data", resource_id, response.text)
     return response
 
 
