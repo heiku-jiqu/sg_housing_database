@@ -40,6 +40,7 @@ def upload_file_to_supabase(
             "apikey": config["config"]["service_key"],
             "authorization": f'Bearer {config["config"]["service_key"]}',
             "x-upsert": str(upsert).lower(),
+            "cache-control": "max-age=604800",
         },
         files={
             filename: (
