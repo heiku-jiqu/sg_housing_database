@@ -23,6 +23,8 @@ if __name__ == "__main__":
     priv_data = request_private_residential_data_batches_concurrent(headers)
 
     pa_tables = [Table.from_pylist(d.json()["Result"]) for d in priv_data]
+    # downloading of JAN2015-DEC2016 data failing due to datagov API bug, can only fetch up to 15706 rows even though max rows is 37153
+
     merged_table = pa.concat_tables(pa_tables)
 
     f = BytesIO()
