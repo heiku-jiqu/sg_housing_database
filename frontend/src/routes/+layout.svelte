@@ -9,9 +9,8 @@
 	} from '$lib/components/plots/store';
 
 	async function load_data() {
-		const duckdb = await initDB();
-
-		const [another_data, priv_resi_data] = await Promise.all([
+		const [duckdb, another_data, priv_resi_data] = await Promise.all([
+			initDB(),
 			fetch('/api/blob_data/hdb'),
 			fetch('/api/blob_data/private')
 		]);
