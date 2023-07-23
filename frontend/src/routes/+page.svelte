@@ -5,8 +5,8 @@
 	import MedianCostPerTown from '$lib/components/plots/MedianCostPerTown.svelte';
 
 	const options = [
-		{ chartName: 'AvgPriceEcharts', component: AvgPriceEcharts },
 		{ chartName: 'AvgPrice', component: AvgPrice },
+		{ chartName: 'AvgPriceEcharts', component: AvgPriceEcharts },
 		{ chartName: 'TransactionVolume', component: TransactionVolume },
 		{ chartName: 'MedianCostPerTown', component: MedianCostPerTown }
 	];
