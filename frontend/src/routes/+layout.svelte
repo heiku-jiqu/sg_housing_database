@@ -9,35 +9,41 @@
 	} from '$lib/components/plots/store';
 
 	async function load_data() {
-		const [duckdb, another_data, priv_resi_data] = await Promise.all([
+		const [duckdb, hdb_data, priv_resi_data] = await Promise.all([
 			initDB(),
 			fetch('/api/blob_data/hdb'),
 			fetch('/api/blob_data/private')
 		]);
 
-		const pq_data_array = new Uint8Array(await another_data.arrayBuffer());
+		const [pq_data_array, pq_priv_resi_array] = await Promise.all([
+			new Uint8Array(await hdb_data.arrayBuffer()),
+			new Uint8Array(await priv_resi_data.arrayBuffer())
+		]);
 
-		const pq_priv_resi_array = new Uint8Array(await priv_resi_data.arrayBuffer());
-
-		await duckdb.registerFileBuffer('pq_file_buffer.parquet', pq_data_array);
-		await duckdb.registerFileBuffer('pq_priv_resi.parquet', pq_priv_resi_array);
+		await Promise.all([
+			duckdb.registerFileBuffer('pq_file_buffer.parquet', pq_data_array),
+			duckdb.registerFileBuffer('pq_priv_resi.parquet', pq_priv_resi_array)
+		]);
 
 		const c = await duckdb.connect();
-		await c.query(`
+
+		await Promise.all([
+			c.query(`
 			CREATE TABLE IF NOT EXISTS resale_hdb AS
 			SELECT * FROM 'pq_file_buffer.parquet';
-		`);
-		await c.query(`
+		`),
+			c.query(`
 			CREATE TABLE IF NOT EXISTS private_resi AS
 			SELECT * FROM 'pq_priv_resi.parquet';
-		`);
-		await c.query(`
+		`),
+			c.query(`
 			CREATE TABLE IF NOT EXISTS private_resi_unnest AS
 			SELECT 
 				* EXCLUDE (transaction), 
 				UNNEST(transaction, recursive := TRUE)
 			FROM private_resi;
-		`);
+		`)
+		]);
 
 		// let x = await c.query(`SELECT * FROM private_resi_unnest LIMIT 10;`);
 		// console.table(JSON.parse(JSON.stringify(x.toArray())));
