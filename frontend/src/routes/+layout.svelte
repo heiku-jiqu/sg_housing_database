@@ -56,7 +56,9 @@
 
 <h1>Housing Prices Trend</h1>
 
-{#await promise then}
+{#await promise}
+	<p>loading...</p>
+{:then}
 	<slot />
 	<a href="/using_store">go to</a>
 {/await}
