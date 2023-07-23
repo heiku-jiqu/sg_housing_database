@@ -20,7 +20,7 @@ export function createQueryStore<
 	};
 }
 
-export const readable_query_res = createQueryStore<{
+export const avg_hdb_resale_store = createQueryStore<{
 	month: DataType<Type.Utf8>;
 	avg_cost: DataType<Type.Float32>;
 }>(

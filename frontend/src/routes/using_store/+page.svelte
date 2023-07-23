@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { readable_query_res } from '$lib/components/plots/store';
+	import { avg_hdb_resale_store } from '$lib/components/plots/store';
 
-	if (!$readable_query_res) {
-		readable_query_res.init();
+	if (!$avg_hdb_resale_store) {
+		avg_hdb_resale_store.init();
 	}
 </script>
 
 <a href="/">back to root</a>
 <br />
-{#if $readable_query_res}
-	{$readable_query_res}
+{#if $avg_hdb_resale_store}
+	{$avg_hdb_resale_store}
 {/if}

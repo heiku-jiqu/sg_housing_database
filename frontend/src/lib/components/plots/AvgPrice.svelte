@@ -1,19 +1,19 @@
 <script lang="ts">
 	import ObsPlot from '$lib/components/ObsPlot.svelte';
 	import * as Plot from '@observablehq/plot';
-	import { readable_query_res } from './store';
+	import { avg_hdb_resale_store } from './store';
 
-	if (!$readable_query_res) {
-		readable_query_res.init();
+	if (!$avg_hdb_resale_store) {
+		avg_hdb_resale_store.init();
 	}
 </script>
 
-{#if $readable_query_res}
+{#if $avg_hdb_resale_store}
 	<ObsPlot
 		plotOpt={{
 			marks: [
 				Plot.line(
-					$readable_query_res.toArray().map((x) => ({ ...x, month: new Date(x.month) })),
+					$avg_hdb_resale_store.toArray().map((x) => ({ ...x, month: new Date(x.month) })),
 					{ x: 'month', y: 'avg_cost', tip: true }
 				)
 			],

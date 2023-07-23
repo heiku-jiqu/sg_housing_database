@@ -1,17 +1,17 @@
 <script lang="ts">
 	import Echarts from '$lib/components/Echarts.svelte';
-	import { readable_query_res } from './store';
+	import { avg_hdb_resale_store } from './store';
 
-	if (!$readable_query_res) {
-		readable_query_res.init();
+	if (!$avg_hdb_resale_store) {
+		avg_hdb_resale_store.init();
 	}
 </script>
 
-{#if $readable_query_res}
+{#if $avg_hdb_resale_store}
 	<Echarts
 		options={{
 			dataset: {
-				source: $readable_query_res.toArray()
+				source: $avg_hdb_resale_store.toArray()
 			},
 			title: {
 				text: 'ECharts Getting Started Example'
