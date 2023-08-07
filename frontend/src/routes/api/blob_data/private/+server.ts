@@ -12,7 +12,10 @@ export async function GET({ url }) {
 		});
 	} else {
 		return new Response(data, {
-			headers: { 'Content-Type': 'application/octet-stream', 'cache-control': 'max-age=14400' }
+			headers: {
+				'Content-Type': 'application/octet-stream',
+				'cache-control': 'public, max-age=14400'
+			}
 		});
 	}
 }
