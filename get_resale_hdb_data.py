@@ -26,14 +26,23 @@ def request_resale_hdb_data(
         "limit": 1,
         "sort": "month",
     }
+    cookies = {"dgs_target": "legacy"}
     if row_limit:
         params.update(limit=row_limit)
-        response = response.get(url=data_gov_url, params=params)
+        response = response.get(url=data_gov_url, params=params, cookies=cookies)
     else:
-        response_current_total = requests.get(url=data_gov_url, params=params)
+        response_current_total = requests.get(
+            url=data_gov_url,
+            params=params,
+            cookies=cookies,
+        )
         current_total = response_current_total.json()["result"]["total"]
         params.update(limit=current_total)
-        response = requests.get(url=data_gov_url, params=params)
+        response = requests.get(
+            url=data_gov_url,
+            params=params,
+            cookies=cookies,
+        )
     if not response.ok:
         raise Exception("failed to request for data", resource_id, response.text)
     return response
