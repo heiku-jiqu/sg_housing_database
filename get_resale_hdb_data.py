@@ -3,7 +3,7 @@ import pyarrow as pa
 from pyarrow import Table
 import pyarrow.parquet as pq
 from enum import Enum
-from typing import List
+from typing import List, Optional
 
 
 class ResourceID(Enum):
@@ -14,7 +14,10 @@ class ResourceID(Enum):
     JAN1990_TO_JAN1999 = "adbbddd3-30e2-445f-a123-29bee150a6fe"
 
 
-def request_resale_hdb_data(resource_id: ResourceID = ResourceID.JAN2017_ONWARDS):
+def request_resale_hdb_data(
+    resource_id: ResourceID = ResourceID.JAN2017_ONWARDS,
+    row_limit: Optional[int] = None,
+):
     print(f"fetching {resource_id}")
     data_gov_url = "https://data.gov.sg/api/action/datastore_search"
 
@@ -23,10 +26,14 @@ def request_resale_hdb_data(resource_id: ResourceID = ResourceID.JAN2017_ONWARDS
         "limit": 1,
         "sort": "month",
     }
-    response_current_total = requests.get(url=data_gov_url, params=params)
-    current_total = response_current_total.json()["result"]["total"]
-    params.update(limit=current_total)
-    response = requests.get(url=data_gov_url, params=params)
+    if row_limit:
+        params.update(limit=row_limit)
+        response = response.get(url=data_gov_url, params=params)
+    else:
+        response_current_total = requests.get(url=data_gov_url, params=params)
+        current_total = response_current_total.json()["result"]["total"]
+        params.update(limit=current_total)
+        response = requests.get(url=data_gov_url, params=params)
     if not response.ok:
         raise Exception("failed to request for data", resource_id, response.text)
     return response
