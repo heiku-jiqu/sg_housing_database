@@ -41,12 +41,25 @@
 		bind:value={num_rows_to_show}
 		style:width="100%"
 	/>
-	<div>{num_rows_to_show}</div>
+	<input type="number" bind:value={num_rows_to_show} />
 </div>
 <br />
 
 {#if arrow_table.numRows > 0}
-	{arrow_slice}
+	<table>
+		<tr>
+			{#each arrow_slice.schema.names as name}
+				<th>{name}</th>
+			{/each}
+		</tr>
+		{#each { length: arrow_slice.numRows } as _, i}
+			<tr>
+				{#each arrow_slice.schema.names as name}
+					<td>{arrow_slice.get(i)[name]}</td>
+				{/each}
+			</tr>
+		{/each}
+	</table>
 {/if}
 
 <br />
