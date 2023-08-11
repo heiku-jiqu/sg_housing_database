@@ -23,7 +23,6 @@
 						y: 'median_cost',
 						stroke: 'town',
 						strokeOpacity: 0.5,
-						tip: true,
 						fy: (d) => Math.floor((Number(d.facet_key) - 1) / 3),
 						fx: (d) => (Number(d.facet_key) - 1) % 3
 					}
@@ -46,7 +45,20 @@
 						dy: 6
 					}
 				),
-				Plot.frame()
+				Plot.frame(),
+				Plot.tip(
+					$median_cost_per_month_per_town
+						.toArray()
+						.map((x) => ({ ...x, month: new Date(x.month) })),
+					Plot.pointer({
+						x: 'month',
+						y: 'median_cost',
+						stroke: 'town',
+						fy: (d) => Math.floor((Number(d.facet_key) - 1) / 3),
+						fx: (d) => (Number(d.facet_key) - 1) % 3,
+						title: (d) => [d.town, d.median_cost, d.month.toLocaleDateString()].join('\n')
+					})
+				)
 			],
 			marginLeft: 70,
 			style: {
