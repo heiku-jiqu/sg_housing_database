@@ -26,7 +26,7 @@ export const avg_hdb_resale_store = createQueryStore<{
 }>(
 	`
 	SELECT 
-    	month, 
+    	strptime(month, '%Y-%m') as month,
     	avg(CAST(resale_price AS INTEGER)) AS avg_cost 
 	FROM resale_hdb
 	GROUP BY month

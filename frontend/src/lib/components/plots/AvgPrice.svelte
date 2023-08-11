@@ -11,6 +11,7 @@
 {#if $avg_hdb_resale_store}
 	<ObsPlot
 		plotOpt={{
+			x: { type: 'utc' },
 			marks: [
 				Plot.line(
 					{ length: $avg_hdb_resale_store.numRows },
