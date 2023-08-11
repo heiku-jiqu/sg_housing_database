@@ -80,13 +80,13 @@
 		position: absolute;
 		left: 1.7rem;
 		top: 3.7rem;
-		width: 3.2rem;
-		transition: width 200ms ease-in-out;
+		width: 0rem;
+		transition: width 75ms ease-in;
 		border-bottom: 4px solid blue;
 		z-index: -1;
 	}
 	h1:hover:before {
 		width: 22rem;
-		transition: width 200ms ease-in-out;
+		transition: width 75ms ease-out;
 	}
 </style>
