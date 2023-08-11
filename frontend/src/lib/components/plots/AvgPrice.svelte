@@ -13,8 +13,12 @@
 		plotOpt={{
 			marks: [
 				Plot.line(
-					$avg_hdb_resale_store.toArray().map((x) => ({ ...x, month: new Date(x.month) })),
-					{ x: 'month', y: 'avg_cost', tip: true }
+					{ length: $avg_hdb_resale_store.numRows },
+					{
+						x: $avg_hdb_resale_store.getChild('month'),
+						y: $avg_hdb_resale_store.getChild('avg_cost'),
+						tip: true
+					}
 				)
 			],
 			marginLeft: 70,
