@@ -35,5 +35,23 @@
 <a href="/">back to root</a>
 <br />
 {#if $avg_hdb_resale_store}
-	{$avg_hdb_resale_store}
+	<table>
+		<tr>
+			{#each $avg_hdb_resale_store.schema.names as name}
+				<th>{name}</th>
+			{/each}
+		</tr>
+		{#each Array(10)
+			.fill(1)
+			.map((_, i) => i + 1) as i}
+			<tr>
+				<td>
+					{$avg_hdb_resale_store.get(i).month}
+				</td>
+				<td>
+					{$avg_hdb_resale_store.get(i).avg_cost}
+				</td>
+			</tr>
+		{/each}
+	</table>
 {/if}
