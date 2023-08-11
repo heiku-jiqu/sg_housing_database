@@ -67,7 +67,6 @@
 	<p>loading...</p>
 {:then}
 	<slot />
-	<a href="/transactions">See transaction details</a>
 {/await}
 
 <style>

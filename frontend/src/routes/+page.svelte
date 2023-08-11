@@ -22,6 +22,8 @@
 
 <svelte:component this={selected.component} />
 
+<a href="/transactions">See transaction details</a>
+
 <style>
 	.tabNav {
 		font-size: 1.5rem;
