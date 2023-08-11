@@ -33,6 +33,23 @@
 </script>
 
 <a href="/">back to root</a>
+<div>{arrow_table.numRows} rows loaded</div>
+<div>
+	<input
+		type="range"
+		min="0"
+		max={arrow_table.numRows}
+		bind:value={num_rows_to_show}
+		style:width="100%"
+	/>
+	<div>{num_rows_to_show}</div>
+</div>
+<br />
+
+{#if arrow_table.numRows > 0}
+	{arrow_slice}
+{/if}
+
 <br />
 {#if $avg_hdb_resale_store}
 	<table>
