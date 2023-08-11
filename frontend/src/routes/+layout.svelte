@@ -66,7 +66,7 @@
 	<p>loading...</p>
 {:then}
 	<slot />
-	<a href="/using_store">go to</a>
+	<a href="/transactions">See transaction details</a>
 {/await}
 
 <style>
