@@ -7,6 +7,7 @@
 		avg_hdb_resale_store,
 		priv_residential_avg_cost
 	} from '$lib/components/plots/store';
+	import { goto } from '$app/navigation';
 
 	async function load_data() {
 		const [duckdb, hdb_data, priv_resi_data] = await Promise.all([
@@ -60,7 +61,7 @@
 	});
 </script>
 
-<h1>Housing Prices Trend</h1>
+<h1 on:click={() => goto('/')}>Housing Prices Trend</h1>
 
 {#await promise}
 	<p>loading...</p>
