@@ -2,7 +2,6 @@
 	import { avg_hdb_resale_store } from '$lib/components/plots/store';
 	import { initDB } from '$lib/duckdb';
 	import * as Arrow from 'apache-arrow';
-	import { connect } from 'echarts';
 
 	if (!$avg_hdb_resale_store) {
 		avg_hdb_resale_store.init();
