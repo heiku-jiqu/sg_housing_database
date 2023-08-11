@@ -2,6 +2,7 @@
 	import { avg_hdb_resale_store } from '$lib/components/plots/store';
 	import { initDB } from '$lib/duckdb';
 	import * as Arrow from 'apache-arrow';
+	import { connect } from 'echarts';
 
 	if (!$avg_hdb_resale_store) {
 		avg_hdb_resale_store.init();
@@ -16,11 +17,13 @@
 	async function get_data() {
 		const duckdb = await initDB();
 		const c = await duckdb.connect();
-		const result = await c.send<T>(`
+		const prep_statement = await c.prepare(`
 			SELECT * FROM resale_hdb
 			ORDER BY month DESC
+			LIMIT ?
 			;
-			`);
+		`);
+		const result = await prep_statement.send(100000);
 		await result.open(); // need to open the reader to get schema!!!
 		arrow_table = new Arrow.Table(result.schema);
 		for await (const batch of result) {
