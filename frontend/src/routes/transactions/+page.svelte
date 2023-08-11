@@ -25,7 +25,6 @@
 		arrow_table = new Arrow.Table(result.schema);
 		for await (const batch of result) {
 			let batch_table = new Arrow.Table(batch);
-			console.log(batch_table.schema);
 			arrow_table = arrow_table.concat(batch_table);
 		}
 	}
