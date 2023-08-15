@@ -29,6 +29,7 @@
 {/await}
 
 <a href="/transactions">See transaction details</a>
+<a href="/remaining_lease">See remaining lease details</a>
 
 <style>
 	.tabNav {
