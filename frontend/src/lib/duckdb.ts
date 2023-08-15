@@ -20,5 +20,10 @@ const initDB = async () => {
 	await db.instantiate(duckdb_wasm);
 	return db;
 };
+const connDB = async () => {
+	await initDB();
+	const c = await db.connect();
+	return c;
+};
 
-export { initDB };
+export { initDB, connDB };
