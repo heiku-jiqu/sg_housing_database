@@ -1,4 +1,6 @@
 <script lang="ts">
+	export let data_promise: Promise<void>;
+
 	import AvgPrice from '$lib/components/plots/AvgPrice.svelte';
 	import AvgPriceEcharts from '$lib/components/plots/AvgPriceEcharts.svelte';
 	import TransactionVolume from '$lib/components/plots/TransactionVolume.svelte';
@@ -20,7 +22,11 @@
 	</button>
 {/each}
 
-<svelte:component this={selected.component} />
+{#await data_promise}
+	<p>loading...</p>
+{:then}
+	<svelte:component this={selected.component} />
+{/await}
 
 <a href="/transactions">See transaction details</a>
 

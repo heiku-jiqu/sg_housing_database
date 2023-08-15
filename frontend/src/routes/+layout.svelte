@@ -63,11 +63,7 @@
 
 <h1 on:click={() => goto('/')}>Housing Prices Trend</h1>
 
-{#await promise}
-	<p>loading...</p>
-{:then}
-	<slot />
-{/await}
+<slot data_promise={promise} />
 
 <style>
 	h1 {
