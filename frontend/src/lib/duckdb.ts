@@ -21,7 +21,7 @@ const initDB = async () => {
 	return db;
 };
 const connDB = async () => {
-	await initDB();
+	db = await initDB();
 	const c = await db.connect();
 	return c;
 };
