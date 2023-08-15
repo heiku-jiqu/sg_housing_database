@@ -15,6 +15,7 @@
 			fetch('/api/blob_data/hdb'),
 			fetch('/api/blob_data/private')
 		]);
+		const duckdb_conn_promise = duckdb.connect();
 
 		const [pq_data_array, pq_priv_resi_array] = await Promise.all([
 			new Uint8Array(await hdb_data.arrayBuffer()),
@@ -26,7 +27,7 @@
 			duckdb.registerFileBuffer('pq_priv_resi.parquet', pq_priv_resi_array)
 		]);
 
-		const c = await duckdb.connect();
+		const c = await duckdb_conn_promise;
 
 		await Promise.all([
 			c.query(`
