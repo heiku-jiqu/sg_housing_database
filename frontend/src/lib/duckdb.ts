@@ -9,6 +9,7 @@ import type { AsyncDuckDB } from '@duckdb/duckdb-wasm';
 let db: AsyncDuckDB | null = null;
 let connection: duckdb.AsyncDuckDBConnection | null = null;
 let connectionPromise: Promise<void> | null;
+let createdTablesPromise: Promise<any> | null;
 
 const initDB = async () => {
 	if (!connectionPromise) {
@@ -29,5 +30,28 @@ const connDB = async () => {
 	connection = await db.connect();
 	return connection;
 };
+const createTables = async () => {
+	const c = await connDB();
+	if (!createdTablesPromise) {
+		createdTablesPromise = Promise.all([
+			c.query(`
+			CREATE VIEW IF NOT EXISTS resale_hdb AS
+			SELECT * FROM 'pq_file_buffer.parquet';
+		`),
+			c.query(`
+			CREATE VIEW IF NOT EXISTS private_resi AS
+			SELECT * FROM 'pq_priv_resi.parquet';
+		`),
+			c.query(`
+				CREATE VIEW IF NOT EXISTS private_resi_unnest AS
+				SELECT
+					* EXCLUDE (transaction),
+					UNNEST(transaction, recursive := TRUE)
+				FROM private_resi;
+			`)
+		]);
+	}
+	return createdTablesPromise;
+};
 
-export { initDB, connDB };
+export { initDB, connDB, createTables };

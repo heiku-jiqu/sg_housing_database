@@ -1,8 +1,9 @@
 <script>
-	import { initDB, connDB } from '$lib/duckdb';
+	import { connDB, createTables } from '$lib/duckdb';
 	import * as Arrow from 'apache-arrow';
 	async function remaining_lease() {
 		const c = await connDB();
+		await createTables();
 		const res = await c.query(`
 		SELECT DISTINCT remaining_lease,
 		CAST(regexp_extract(remaining_lease, '[0-9]+') AS INTEGER) AS remaining_lease_year 

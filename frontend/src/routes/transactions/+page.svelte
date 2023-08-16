@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { avg_hdb_resale_store } from '$lib/components/plots/store';
-	import { initDB, connDB } from '$lib/duckdb';
+	import { connDB, createTables } from '$lib/duckdb';
 	import * as Arrow from 'apache-arrow';
 
 	if (!$avg_hdb_resale_store) {
@@ -15,6 +15,7 @@
 	}
 	async function get_data() {
 		const c = await connDB();
+		await createTables;
 		const prep_statement = await c.prepare(`
 			SELECT * FROM resale_hdb
 			ORDER BY month DESC
