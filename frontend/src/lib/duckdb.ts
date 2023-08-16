@@ -7,23 +7,27 @@ import duckdb_worker from '@duckdb/duckdb-wasm/dist/duckdb-browser-mvp.worker.js
 import type { AsyncDuckDB } from '@duckdb/duckdb-wasm';
 
 let db: AsyncDuckDB | null = null;
+let connection: duckdb.AsyncDuckDBConnection | null = null;
+let connectionPromise: Promise<void> | null;
 
 const initDB = async () => {
-	if (db) {
-		return db;
+	if (!connectionPromise) {
+		const logger = new duckdb.ConsoleLogger();
+		const worker = new Worker(duckdb_worker);
+
+		db = new duckdb.AsyncDuckDB(logger, worker);
+		connectionPromise = await db.instantiate(duckdb_wasm, duckdb_worker);
 	}
 
-	const logger = new duckdb.ConsoleLogger();
-	const worker = new Worker(duckdb_worker);
-
-	db = new duckdb.AsyncDuckDB(logger, worker);
-	await db.instantiate(duckdb_wasm, duckdb_worker);
 	return db;
 };
 const connDB = async () => {
+	if (connection) {
+		return connection;
+	}
 	db = await initDB();
-	const c = await db.connect();
-	return c;
+	connection = await db.connect();
+	return connection;
 };
 
 export { initDB, connDB };
