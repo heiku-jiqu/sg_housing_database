@@ -31,20 +31,20 @@
 
 		await Promise.all([
 			c.query(`
-			CREATE TABLE IF NOT EXISTS resale_hdb AS
+			CREATE VIEW IF NOT EXISTS resale_hdb AS
 			SELECT * FROM 'pq_file_buffer.parquet';
 		`),
 			c.query(`
-			CREATE TABLE IF NOT EXISTS private_resi AS
+			CREATE VIEW IF NOT EXISTS private_resi AS
 			SELECT * FROM 'pq_priv_resi.parquet';
 		`),
 			c.query(`
-			CREATE TABLE IF NOT EXISTS private_resi_unnest AS
-			SELECT 
-				* EXCLUDE (transaction), 
-				UNNEST(transaction, recursive := TRUE)
-			FROM private_resi;
-		`)
+				CREATE VIEW IF NOT EXISTS private_resi_unnest AS
+				SELECT
+					* EXCLUDE (transaction),
+					UNNEST(transaction, recursive := TRUE)
+				FROM private_resi;
+			`)
 		]);
 
 		// let x = await c.query(`SELECT * FROM private_resi_unnest LIMIT 10;`);
