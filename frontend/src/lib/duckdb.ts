@@ -7,7 +7,7 @@ import duckdb_worker from '@duckdb/duckdb-wasm/dist/duckdb-browser-mvp.worker.js
 import type { AsyncDuckDB } from '@duckdb/duckdb-wasm';
 
 let db: AsyncDuckDB | null = null;
-let connection: duckdb.AsyncDuckDBConnection | null = null;
+let connection: duckdb.AsyncDuckDBConnection | undefined = undefined;
 let connectionPromise: Promise<void> | null;
 let createdTablesPromise: Promise<any> | null;
 
@@ -24,11 +24,11 @@ const initDB = async () => {
 };
 const connDB = async () => {
 	if (connection) {
-		return connection;
+		return connection as duckdb.AsyncDuckDBConnection;
 	}
 	db = await initDB();
-	connection = await db.connect();
-	return connection;
+	connection = await db?.connect();
+	return connection as duckdb.AsyncDuckDBConnection;
 };
 const createTables = async () => {
 	const c = await connDB();

@@ -77,10 +77,10 @@
 			.map((_, i) => i + 1) as i}
 			<tr>
 				<td>
-					{$avg_hdb_resale_store.get(i).month}
+					{$avg_hdb_resale_store.get(i)?.month}
 				</td>
 				<td>
-					{$avg_hdb_resale_store.get(i).avg_cost}
+					{$avg_hdb_resale_store.get(i)?.avg_cost}
 				</td>
 			</tr>
 		{/each}

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { initDB } from '$lib/duckdb';
 	import '../styles.css';
 	import {
@@ -8,6 +8,7 @@
 		priv_residential_avg_cost
 	} from '$lib/components/plots/store';
 	import { goto } from '$app/navigation';
+	import type { AsyncDuckDBConnection } from '@duckdb/duckdb-wasm';
 
 	async function load_data() {
 		const [duckdb, hdb_data, priv_resi_data] = await Promise.all([
@@ -15,7 +16,7 @@
 			fetch('/api/blob_data/hdb'),
 			fetch('/api/blob_data/private')
 		]);
-		const duckdb_conn_promise = duckdb.connect();
+		const duckdb_conn_promise = duckdb?.connect();
 
 		const [pq_data_array, pq_priv_resi_array] = await Promise.all([
 			new Uint8Array(await hdb_data.arrayBuffer()),
@@ -23,11 +24,11 @@
 		]);
 
 		await Promise.all([
-			duckdb.registerFileBuffer('pq_file_buffer.parquet', pq_data_array),
-			duckdb.registerFileBuffer('pq_priv_resi.parquet', pq_priv_resi_array)
+			duckdb?.registerFileBuffer('pq_file_buffer.parquet', pq_data_array),
+			duckdb?.registerFileBuffer('pq_priv_resi.parquet', pq_priv_resi_array)
 		]);
 
-		const c = await duckdb_conn_promise;
+		const c = (await duckdb_conn_promise) as AsyncDuckDBConnection;
 
 		await Promise.all([
 			c.query(`
