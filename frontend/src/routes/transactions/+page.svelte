@@ -3,9 +3,6 @@
 	import { connDB, createTables } from '$lib/duckdb';
 	import * as Arrow from 'apache-arrow';
 
-	if (!$avg_hdb_resale_store) {
-		avg_hdb_resale_store.init();
-	}
 	$: arrow_table = new Arrow.Table();
 
 	let num_rows_to_show = 10;
@@ -15,7 +12,8 @@
 	}
 	async function get_data() {
 		const c = await connDB();
-		await createTables;
+		await createTables();
+		avg_hdb_resale_store.init();
 		const prep_statement = await c.prepare(`
 			SELECT * FROM resale_hdb
 			ORDER BY month DESC

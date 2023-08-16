@@ -12,7 +12,7 @@ let connectionPromise: Promise<void> | null;
 let createdTablesPromise: Promise<any> | null;
 
 const initDB = async () => {
-	if (!connectionPromise) {
+	if (!db && !connectionPromise) {
 		const logger = new duckdb.ConsoleLogger();
 		const worker = new Worker(duckdb_worker);
 
@@ -26,13 +26,29 @@ const connDB = async () => {
 	if (connection) {
 		return connection as duckdb.AsyncDuckDBConnection;
 	}
-	db = await initDB();
+	await initDB();
 	connection = await db?.connect();
 	return connection as duckdb.AsyncDuckDBConnection;
 };
+
 const createTables = async () => {
-	const c = await connDB();
 	if (!createdTablesPromise) {
+		const [duckdb, hdb_data, priv_resi_data] = await Promise.all([
+			initDB(),
+			fetch('/api/blob_data/hdb'),
+			fetch('/api/blob_data/private')
+		]);
+
+		const [pq_data_array, pq_priv_resi_array] = await Promise.all([
+			new Uint8Array(await hdb_data.arrayBuffer()),
+			new Uint8Array(await priv_resi_data.arrayBuffer())
+		]);
+
+		const p = await Promise.all([
+			duckdb?.registerFileBuffer('pq_file_buffer.parquet', pq_data_array),
+			duckdb?.registerFileBuffer('pq_priv_resi.parquet', pq_priv_resi_array)
+		]);
+		const c = await duckdb.connect();
 		createdTablesPromise = Promise.all([
 			c.query(`
 			CREATE VIEW IF NOT EXISTS resale_hdb AS
