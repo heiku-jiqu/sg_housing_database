@@ -8,6 +8,7 @@ declare global {
 		interface Platform {
 			env: {
 				COUNTER: DurableObjectNamespace;
+				KV: KVNamespace;
 			};
 			context: {
 				waitUntil(promise: Promise<any>): void;
