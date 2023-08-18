@@ -1,9 +1,10 @@
 <script>
+	export let data;
 	import RemainingLease from '$lib/components/plots/RemainingLease.svelte';
 	import { initDB, connDB } from '$lib/duckdb';
 	import { DuckDBDataProtocol } from '@duckdb/duckdb-wasm';
 	let load = async function () {
-		const c = await connDB();
+		const c = data.dbconn;
 		const db = await initDB();
 		const pq = await fetch(`/api/kv/hdb`);
 

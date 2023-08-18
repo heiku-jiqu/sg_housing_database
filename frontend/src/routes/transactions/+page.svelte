@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { avg_hdb_resale_store } from '$lib/components/plots/store';
-	import { connDB, createTables } from '$lib/duckdb';
 	import * as Arrow from 'apache-arrow';
+	export let data;
 
 	$: arrow_table = new Arrow.Table();
 
@@ -11,8 +11,7 @@
 		arrow_slice = arrow_table.slice(0, num_rows_to_show);
 	}
 	async function get_data() {
-		const c = await connDB();
-		await createTables();
+		const c = data.dbconn;
 		avg_hdb_resale_store.init();
 		const prep_statement = await c.prepare(`
 			SELECT * FROM resale_hdb
@@ -20,7 +19,7 @@
 			LIMIT ?
 			;
 		`);
-		const result = await prep_statement.send(100000);
+		const result = await prep_statement.send(1000);
 		await result.open(); // need to open the reader to get schema!!!
 		arrow_table = new Arrow.Table(result.schema);
 		for await (const batch of result) {
