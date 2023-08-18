@@ -1,12 +1,10 @@
 <script lang="ts">
 	import AvgPrice from '$lib/components/plots/AvgPrice.svelte';
-	import AvgPriceEcharts from '$lib/components/plots/AvgPriceEcharts.svelte';
 	import TransactionVolume from '$lib/components/plots/TransactionVolume.svelte';
 	import MedianCostPerTown from '$lib/components/plots/MedianCostPerTown.svelte';
 
 	const options = [
 		{ chartName: 'AvgPrice', component: AvgPrice },
-		{ chartName: 'AvgPriceEcharts', component: AvgPriceEcharts },
 		{ chartName: 'TransactionVolume', component: TransactionVolume },
 		{ chartName: 'MedianCostPerTown', component: MedianCostPerTown }
 	];
