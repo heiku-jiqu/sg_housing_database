@@ -1,15 +1,20 @@
 <script lang="ts">
 	import { avg_hdb_resale_store } from '$lib/components/plots/store';
-	import type * as Arrow from 'apache-arrow';
+	import * as Arrow from 'apache-arrow';
+	import { onMount } from 'svelte';
 	export let data;
 
 	$: arrow_table = data.arrow_table;
-
 	let num_rows_to_show = 10;
 	let arrow_slice: Arrow.Table;
 	$: if (arrow_table.numRows > 0) {
 		arrow_slice = arrow_table.slice(0, num_rows_to_show);
 	}
+	onMount(async () => {
+		for await (const batch of data.async_reader) {
+			arrow_table = arrow_table.concat(new Arrow.Table(batch));
+		}
+	});
 </script>
 
 <a href="/">back to root</a>

@@ -10,14 +10,12 @@ export async function load({ parent }) {
 			LIMIT ?
 			;
 		`);
-	const result = await prep_statement.send(1000);
+	const result = await prep_statement.send(100000);
 	await result.open(); // need to open the reader to get schema!!!
-	let arrow_table = new Arrow.Table(result.schema);
-	for await (const batch of result) {
-		const batch_table = new Arrow.Table(batch);
-		arrow_table = arrow_table.concat(batch_table);
-	}
+	const arrow_table = new Arrow.Table(result.schema);
+
 	return {
-		arrow_table: arrow_table
+		arrow_table: arrow_table,
+		async_reader: result
 	};
 }
