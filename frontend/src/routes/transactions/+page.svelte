@@ -1,33 +1,15 @@
 <script lang="ts">
 	import { avg_hdb_resale_store } from '$lib/components/plots/store';
-	import * as Arrow from 'apache-arrow';
+	import type * as Arrow from 'apache-arrow';
 	export let data;
 
-	$: arrow_table = new Arrow.Table();
+	$: arrow_table = data.arrow_table;
 
 	let num_rows_to_show = 10;
 	let arrow_slice: Arrow.Table;
 	$: if (arrow_table.numRows > 0) {
 		arrow_slice = arrow_table.slice(0, num_rows_to_show);
 	}
-	async function get_data() {
-		const c = data.dbconn;
-		avg_hdb_resale_store.init();
-		const prep_statement = await c.prepare(`
-			SELECT * FROM resale_hdb
-			ORDER BY month DESC
-			LIMIT ?
-			;
-		`);
-		const result = await prep_statement.send(1000);
-		await result.open(); // need to open the reader to get schema!!!
-		arrow_table = new Arrow.Table(result.schema);
-		for await (const batch of result) {
-			let batch_table = new Arrow.Table(batch);
-			arrow_table = arrow_table.concat(batch_table);
-		}
-	}
-	get_data();
 </script>
 
 <a href="/">back to root</a>
