@@ -2,10 +2,6 @@
 	import ObsPlot from '$lib/components/ObsPlot.svelte';
 	import * as Plot from '@observablehq/plot';
 	import { avg_hdb_resale_store } from './store';
-
-	if (!$avg_hdb_resale_store) {
-		avg_hdb_resale_store.init();
-	}
 </script>
 
 {#if $avg_hdb_resale_store}

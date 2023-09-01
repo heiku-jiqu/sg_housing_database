@@ -2,12 +2,11 @@
 	import ObsPlot from '../ObsPlot.svelte';
 	import * as Plot from '@observablehq/plot';
 	import type { PlotOptions } from '@observablehq/plot';
-	import { connDB, createTables } from '$lib/duckdb';
+	import { connDB } from '$lib/duckdb';
 	import * as Arrow from 'apache-arrow';
 	$: town = 'JURONG EAST';
 	async function remaining_lease() {
 		const c = await connDB();
-		await createTables();
 		const res = await c.query(`
 		WITH tbl AS (
 			SELECT *, 
