@@ -6,11 +6,10 @@ import {
 	priv_residential_avg_cost
 } from '$lib/components/plots/store';
 import { browser } from '$app/environment';
-export const prerender = true;
+//export const prerender = true;
 // need render on client because WebWorker is clientside only
 export const ssr = false;
 
-/** @type {import('./$types').LayoutServerLoad} */
 export async function load({ data }) {
 	if (browser) {
 		// initiate dl parquet duckdb

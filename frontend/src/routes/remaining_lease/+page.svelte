@@ -1,8 +1,8 @@
 <script>
 	export let data;
 	import RemainingLease from '$lib/components/plots/RemainingLease.svelte';
-	import { initDB, connDB } from '$lib/duckdb';
-	import { AsyncDuckDBConnection, DuckDBDataProtocol } from '@duckdb/duckdb-wasm';
+	import { initDB } from '$lib/duckdb';
+	import { DuckDBDataProtocol } from '@duckdb/duckdb-wasm';
 	let load = async function () {
 		const c = await data.streamed?.dbconn;
 		const db = await initDB();
