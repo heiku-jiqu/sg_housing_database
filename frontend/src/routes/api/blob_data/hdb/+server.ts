@@ -1,7 +1,7 @@
 import { supabase } from '$lib/supabase';
 import type { RequestHandler } from '../$types';
 
-export async function GET({ url }) {
+export async function GET({ fetch, url }) {
 	const { data, error } = await supabase.storage
 		.from('sg-housing-db')
 		//.download('resale.parquet.zstd');
