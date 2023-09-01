@@ -56,7 +56,7 @@ export async function load({ data }) {
 				FROM private_resi;
 			`);
 		});
-		createdTablesPromise.then(() => {
+		const tablesInitiated = createdTablesPromise.then(() => {
 			transaction_vol_store.init();
 			median_cost_per_month_per_town.init();
 			avg_hdb_resale_store.init();
@@ -65,7 +65,8 @@ export async function load({ data }) {
 
 		return {
 			streamed: {
-				dbconn: c
+				dbconn: c,
+				tablesInitiated
 			}
 		};
 	}

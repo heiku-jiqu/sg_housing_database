@@ -1,10 +1,11 @@
 import * as Arrow from 'apache-arrow';
+import { avg_hdb_resale_store } from '$lib/components/plots/store';
 /** @type {import('./$types').PageLoad} */
 export async function load({ parent }) {
-	const { dbconn } = await parent();
-	const c = dbconn;
-	//avg_hdb_resale_store.init();
-	const prep_statement = await c.prepare(`
+	const { streamed } = await parent();
+	const c = await streamed?.dbconn;
+	await avg_hdb_resale_store.init();
+	const prep_statement = await c?.prepare(`
 			SELECT * FROM resale_hdb
 			ORDER BY month DESC
 			LIMIT ?
