@@ -4,6 +4,7 @@ import { avg_hdb_resale_store } from '$lib/components/plots/store';
 export async function load({ parent }) {
 	const { streamed } = await parent();
 	const c = await streamed?.dbconn;
+	await streamed?.tablesInitiated;
 	await avg_hdb_resale_store.init();
 	const prep_statement = await c?.prepare(`
 			SELECT * FROM resale_hdb
