@@ -1,12 +1,13 @@
 <script lang="ts">
+	export let c: AsyncDuckDBConnection | undefined;
 	import ObsPlot from '../ObsPlot.svelte';
 	import * as Plot from '@observablehq/plot';
 	import type { PlotOptions } from '@observablehq/plot';
 	import { connDB } from '$lib/duckdb';
 	import * as Arrow from 'apache-arrow';
+	import type { AsyncDuckDBConnection } from '@duckdb/duckdb-wasm';
 	$: town = 'JURONG EAST';
 	async function remaining_lease() {
-		const c = await connDB();
 		const res = await c.query(`
 		WITH tbl AS (
 			SELECT *, 
