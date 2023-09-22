@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import type { Table, DataType, Type } from 'apache-arrow';
-import { connDB } from '$lib/duckdb';
+import { conn } from '$lib/duckdb2';
 
 export function createQueryStore<
 	T extends {
@@ -12,8 +12,7 @@ export function createQueryStore<
 	return {
 		subscribe,
 		init: async () => {
-			const c = await connDB();
-			const result = await c.query<T>(query);
+			const result = await conn.query<T>(query);
 			set(result);
 		}
 	};

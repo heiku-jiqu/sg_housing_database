@@ -2,10 +2,6 @@
 	import ObsPlot from '$lib/components/ObsPlot.svelte';
 	import * as Plot from '@observablehq/plot';
 	import { transaction_vol_store } from '$lib/components/plots/store';
-
-	if (!$transaction_vol_store) {
-		transaction_vol_store.init();
-	}
 </script>
 
 {#if !$transaction_vol_store}

@@ -1,11 +1,12 @@
 <script lang="ts">
-	export let c: AsyncDuckDBConnection | undefined;
+	import type { AsyncDuckDBConnection } from '@duckdb/duckdb-wasm';
+	import { conn, createdTablesPromise } from '$lib/duckdb2';
 	import ObsPlot from '../ObsPlot.svelte';
 	import * as Plot from '@observablehq/plot';
-	import type { AsyncDuckDBConnection } from '@duckdb/duckdb-wasm';
 	$: town = 'JURONG EAST';
 	async function remaining_lease() {
-		const res = await c?.query(`
+		await createdTablesPromise;
+		const res = await conn.query(`
 		WITH tbl AS (
 			SELECT *, 
 			CAST((month[:4]) AS INTEGER) AS year_of_transaction ,
