@@ -1,7 +1,7 @@
 import { avg_hdb_resale_store } from '$lib/components/plots/store';
 import { conn, tablesInitiated } from '$lib/duckdb2';
 import * as Arrow from 'apache-arrow';
-import { readable, writable } from 'svelte/store';
+import { writable } from 'svelte/store';
 
 await tablesInitiated;
 await avg_hdb_resale_store.init();

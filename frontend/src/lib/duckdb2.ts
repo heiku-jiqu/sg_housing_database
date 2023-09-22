@@ -47,7 +47,7 @@ const register_promise = Promise.all([db_promise, dl_promise]).then(([db, [d1, d
 
 const db = await db_promise;
 const conn = await db.connect();
-const createdTablesPromise = Promise.all([register_promise, conn]).then(([r, c]) => {
+const createdTablesPromise = Promise.all([register_promise, conn]).then(([, c]) => {
 	c.query(`
 	CREATE VIEW IF NOT EXISTS resale_hdb AS
 	SELECT * FROM 'pq_file_buffer.parquet';
