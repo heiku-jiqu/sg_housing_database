@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { AsyncDuckDBConnection } from '@duckdb/duckdb-wasm';
 	import { conn, createdTablesPromise } from '$lib/duckdb2';
 	import ObsPlot from '../ObsPlot.svelte';
 	import * as Plot from '@observablehq/plot';
@@ -50,13 +49,4 @@
 			]
 		}}
 	/>
-	<!-- {#each res.toArray() as l}
-		<table>
-			<tr>
-				<td>
-					{l}
-				</td>
-			</tr>
-		</table>
-	{/each} -->
 {/await}
