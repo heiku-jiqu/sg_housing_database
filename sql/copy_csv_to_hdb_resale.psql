@@ -1,7 +1,0 @@
--- need to run in PSQL, cannot send this query straight to the db server as \COPY is not recognised
--- psql -U postgres -d sg_housing_database -f "C:\Users\Heiser\Downloads\Data Science and Analytics Course\sg_housing_database\sql\copy_csv_to_hdb_resale.psql"
-BEGIN;
-
-\COPY resale_hdb FROM 'C:/Users/Heiser/Downloads/Data Science and Analytics Course/sg_housing_database/loading_area/resale_hdb/resale_hdb.csv' WITH (FORMAT csv, HEADER TRUE);
-
-COMMIT;
