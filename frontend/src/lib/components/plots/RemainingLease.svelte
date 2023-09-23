@@ -5,7 +5,8 @@
 	$: town = 'JURONG EAST';
 	async function remaining_lease() {
 		await createdTablesPromise;
-		const res = await conn.query(`
+		const c = await conn;
+		const res = await c.query(`
 		WITH tbl AS (
 			SELECT *, 
 			CAST((month[:4]) AS INTEGER) AS year_of_transaction ,

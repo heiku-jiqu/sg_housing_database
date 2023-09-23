@@ -5,7 +5,8 @@ import { writable } from 'svelte/store';
 
 await tablesInitiated;
 await avg_hdb_resale_store.init();
-const prep_statement = await conn.prepare(`
+const c = await conn;
+const prep_statement = await c.prepare(`
 			SELECT * FROM resale_hdb
 			ORDER BY month DESC
 			LIMIT ?

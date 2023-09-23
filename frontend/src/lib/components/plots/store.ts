@@ -12,7 +12,8 @@ export function createQueryStore<
 	return {
 		subscribe,
 		init: async () => {
-			const result = await conn.query<T>(query);
+			const c = await conn;
+			const result = await c.query<T>(query);
 			set(result);
 		}
 	};

@@ -45,9 +45,10 @@ const register_promise = Promise.all([db_promise, dl_promise]).then(([db, [d1, d
 	db.registerFileBuffer('pq_priv_resi.parquet', d2);
 });
 
-const db = await db_promise;
-const conn = await db.connect();
-const createdTablesPromise = Promise.all([register_promise, conn]).then(([, c]) => {
+const conn_promise = db_promise.then((db) => {
+	return db.connect();
+});
+const createdTablesPromise = Promise.all([register_promise, conn_promise]).then(([, c]) => {
 	c.query(`
 	CREATE VIEW IF NOT EXISTS resale_hdb AS
 	SELECT * FROM 'pq_file_buffer.parquet';
@@ -71,4 +72,6 @@ const tablesInitiated = createdTablesPromise.then(() => {
 	priv_residential_avg_cost.init();
 });
 
-export { db, conn, createdTablesPromise, tablesInitiated };
+// const db = await db_promise;
+// const conn = await conn_promise;
+export { db_promise as db, conn_promise as conn, createdTablesPromise, tablesInitiated };
