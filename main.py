@@ -28,7 +28,7 @@ if __name__ == "__main__":
     merged_table = pa.concat_tables(pa_tables)
 
     f = BytesIO()
-    pq.write_table(merged_table, f, compression="zstd")
+    pq.write_table(merged_table, f, compression="zstd", compression_level=22)
     f.seek(0)
 
     res = upload_file_to_supabase(
@@ -55,9 +55,27 @@ if __name__ == "__main__":
             )
         else:
             raise Exception("unknown schema to cast")
-    merged_hdb_table = pa.concat_tables(encoded_hdb_tables, promote=True)
+    merged_hdb_table = (
+        pa.concat_tables(encoded_hdb_tables, promote=True)
+        .drop(["_id"])
+        .sort_by(
+            [
+                ("flat_type", "ascending"),
+                ("storey_range", "ascending"),
+                ("town", "ascending"),
+                ("flat_model", "ascending"),
+                ("lease_commence_date", "ascending"),
+                ("floor_area_sqm", "ascending"),
+                ("month", "ascending"),
+                ("street_name", "ascending"),
+                ("remaining_lease", "ascending"),
+                ("block", "ascending"),
+                ("resale_price", "ascending"),
+            ]
+        )
+    )
     f_hdb = BytesIO()
-    pq.write_table(merged_hdb_table, f_hdb)
+    pq.write_table(merged_hdb_table, f_hdb, compression="ZSTD", compression_level=22)
     f_hdb.seek(0)
     res_hdb = upload_file_to_supabase(
         get_supabase_configs(),
@@ -67,3 +85,24 @@ if __name__ == "__main__":
         upsert=True,
     )
     print(res_hdb.content)
+
+pq.write_table(
+    merged_hdb_table.drop(["_id"]).sort_by(
+        [
+            ("flat_type", "ascending"),
+            ("storey_range", "ascending"),
+            ("town", "ascending"),
+            ("flat_model", "ascending"),
+            ("lease_commence_date", "ascending"),
+            ("floor_area_sqm", "ascending"),
+            ("month", "ascending"),
+            ("street_name", "ascending"),
+            ("remaining_lease", "ascending"),
+            ("block", "ascending"),
+            ("resale_price", "ascending"),
+        ]
+    ),
+    "./test1.pq",
+    compression="zstd",
+    compression_level=22,
+)
