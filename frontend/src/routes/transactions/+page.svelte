@@ -6,6 +6,11 @@
 	let selected: string;
 
 	streamData();
+
+	const currency_formatter = new Intl.NumberFormat('en-US', {
+		style: 'currency',
+		currency: 'USD'
+	});
 </script>
 
 <a href="/">back to root</a>
@@ -55,15 +60,16 @@
 				<th>{name}</th>
 			{/each}
 		</tr>
-		{#each Array(10)
-			.fill(1)
-			.map((_, i) => i + 1) as i}
+		{#each { length: $avg_hdb_resale_store.numRows } as _, i}
 			<tr>
 				<td>
-					{$avg_hdb_resale_store.get(i)?.month}
+					{new Date($avg_hdb_resale_store.get(i)?.month).toLocaleDateString('en-SG', {
+						year: 'numeric',
+						month: 'short'
+					})}
 				</td>
 				<td>
-					{$avg_hdb_resale_store.get(i)?.avg_cost}
+					{currency_formatter.format($avg_hdb_resale_store.get(i)?.avg_cost)}
 				</td>
 			</tr>
 		{/each}
