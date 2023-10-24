@@ -1,14 +1,23 @@
 <script lang="ts">
 	import { avg_hdb_resale_store } from '$lib/components/plots/store';
-	import { tableStore as table, streamData } from './data';
+	import { tableStore as table, streamData, town, getData } from './data';
 
 	let num_rows_to_show = 10;
+	let selected: string;
 
 	streamData();
 </script>
 
 <a href="/">back to root</a>
 <div>{$table.numRows} rows loaded</div>
+<div class="dropdown">
+	<select bind:value={selected} on:change={() => getData(selected, 1000)}>
+		{#each { length: town.numRows } as _, i}
+			<option>{town.get(i)?.town}</option>
+		{/each}
+	</select>
+</div>
+
 <div>
 	<input
 		type="range"
