@@ -11,6 +11,17 @@
 		style: 'currency',
 		currency: 'USD'
 	});
+
+	function prettyHeaders(s: string, sep: string = '_'): string {
+		let x = s
+			.split(sep)
+			.map((x) => {
+				let i = x.toLowerCase();
+				return i[0].toUpperCase() + i.slice(1);
+			})
+			.join(' ');
+		return x;
+	}
 </script>
 
 <a href="/">back to root</a>
@@ -18,7 +29,7 @@
 <div class="dropdown">
 	<select bind:value={selected} on:change={() => getData(selected, 1000)}>
 		{#each { length: town.numRows } as _, i}
-			<option>{town.get(i)?.town}</option>
+			<option value={town.get(i)?.town}>{prettyHeaders(town.get(i)?.town, ' ')}</option>
 		{/each}
 	</select>
 </div>
@@ -39,13 +50,17 @@
 	<table>
 		<tr>
 			{#each $table.schema.names as name}
-				<th>{name}</th>
+				<th>{prettyHeaders(name)}</th>
 			{/each}
 		</tr>
 		{#each { length: num_rows_to_show } as _, i}
 			<tr>
 				{#each $table.schema.names as name}
-					<td>{$table.get(i)?.[name]}</td>
+					<td
+						>{name === 'resale_price'
+							? currency_formatter.format($table.get(i)?.[name])
+							: $table.get(i)?.[name]}</td
+					>
 				{/each}
 			</tr>
 		{/each}
@@ -57,7 +72,7 @@
 	<table>
 		<tr>
 			{#each $avg_hdb_resale_store.schema.names as name}
-				<th>{name}</th>
+				<th>{prettyHeaders(name)}</th>
 			{/each}
 		</tr>
 		{#each { length: $avg_hdb_resale_store.numRows } as _, i}
