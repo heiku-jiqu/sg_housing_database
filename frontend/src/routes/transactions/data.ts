@@ -24,7 +24,6 @@ export const streamData = async () => {
 export const town = await c.query(`SELECT DISTINCT town FROM resale_hdb ORDER BY town`);
 
 export async function getData(town: string, limit: number) {
-	console.log(town);
 	const stmt = await c.prepare(`
 	SELECT * FROM resale_hdb 
 	WHERE town = ? 
