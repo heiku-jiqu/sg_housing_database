@@ -25,13 +25,15 @@
 		`);
 		return res;
 	}
+	let year = 2000;
 </script>
+
+<input bind:value={year} type="range" min="1990" max="2023" />
+<span>{year}</span>
 
 {#await remaining_lease() then res}
 	<ObsPlot
 		plotOpt={{
-			height: 4000,
-			width: 2000,
 			grid: true,
 			marks: [
 				Plot.dot(
@@ -39,11 +41,15 @@
 					{
 						x: res.getChild('lease_passed_year'),
 						y: res.getChild('avg_price'),
-						fy: res.getChild('year_of_transaction'),
-						fx: res.getChild('flat_type'),
+						// fy: res.getChild('year_of_transaction'),
+						// fx: res.getChild('flat_type'),
 						opacity: 0.5,
 						stroke: res.getChild('flat_type'),
-						tip: true
+						tip: true,
+						filter: res
+							.getChild('year_of_transaction')
+							?.toArray()
+							.map((x) => x === year)
 					}
 				),
 				Plot.frame()

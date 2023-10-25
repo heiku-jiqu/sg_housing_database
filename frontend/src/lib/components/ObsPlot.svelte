@@ -4,9 +4,15 @@
 
 	export let plotOpt: Plot.PlotOptions;
 
-	function plot(node: HTMLElement) {
-		node.appendChild(Plot.plot(plotOpt));
+	function plot(node: HTMLElement, plotOpt: Plot.PlotOptions) {
+		var plot = Plot.plot(plotOpt);
+		node.appendChild(plot);
+		return {
+			update(plotOpt: Plot.PlotOptions) {
+				node.replaceChildren(Plot.plot(plotOpt));
+			}
+		};
 	}
 </script>
 
-<div use:plot in:fade />
+<div use:plot={plotOpt} in:fade />

@@ -1,5 +1,9 @@
-<script>
-	import RemainingLease from '$lib/components/plots/RemainingLease.svelte';
+<script lang="ts">
+	import { res } from './data';
+	import ObsPlot from '$lib/components/ObsPlot.svelte';
+	import * as Plot from '@observablehq/plot';
+
+	let year = 2020;
 	// let load = async function () {
 	// 	const pq = await fetch(`/api/kv/hdb`);
 
@@ -11,6 +15,32 @@
 	// 	const res = await conn.query(`SELECT COUNT(*) FROM read_parquet(kv_pq_url)`);
 	// 	return res;
 	// };
+
+	$: plotOpt = {
+		grid: true,
+		marks: [
+			Plot.dot(
+				{ length: res.numRows },
+				{
+					x: res.getChild('lease_passed_year'),
+					y: res.getChild('avg_price'),
+					// fy: res.getChild('year_of_transaction'),
+					// fx: res.getChild('flat_type'),
+					opacity: 0.5,
+					stroke: res.getChild('flat_type'),
+					tip: true,
+					filter: res
+						.getChild('year_of_transaction')
+						?.toArray()
+						.map((x: number) => x === year)
+				}
+			),
+			Plot.frame()
+		]
+	};
 </script>
 
-<RemainingLease />
+<input bind:value={year} type="range" min="1990" max="2023" />
+<span>{year}</span>
+
+<ObsPlot {plotOpt} />
