@@ -16,10 +16,10 @@
 		year: 'numeric',
 		month: '2-digit'
 	});
-	function handleMove(event: InputEvent) {
-		if (event.target?.name === 'low' && low > high) {
+	function handleMove(event: Event & { currentTarget: HTMLInputElement }) {
+		if (event.currentTarget.name === 'low' && low > high) {
 			high = low;
-		} else if (event.target?.name === 'high' && high < low) {
+		} else if (event.currentTarget.name === 'high' && high < low) {
 			low = high;
 		}
 		dateLow = new Date(low);
