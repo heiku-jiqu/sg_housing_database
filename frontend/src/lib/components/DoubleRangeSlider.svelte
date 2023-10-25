@@ -8,8 +8,14 @@
 	let low = dateLow.getTime();
 	let high = dateHigh.getTime();
 	let step = 24 * 60 * 60 * 1000;
-	$: monthYearLow = dateLow.toISOString().slice(0, 7);
-	$: monthYearHigh = dateHigh.toISOString().slice(0, 7);
+	$: monthYearLow = dateLow.toLocaleDateString('en-CA', {
+		year: 'numeric',
+		month: '2-digit'
+	});
+	$: monthYearHigh = dateHigh.toLocaleDateString('en-CA', {
+		year: 'numeric',
+		month: '2-digit'
+	});
 	function handleMove(event: InputEvent) {
 		if (event.target?.name === 'low' && low > high) {
 			high = low;
@@ -41,20 +47,21 @@
 	}
 </script>
 
-<div class="range-slider">
-	<span
-		style="left:{((low - min) / (max - min)) * 100}%; right:{100 -
-			((high - min) / (max - min)) * 100}%"
-		class="range-selected"
-	/>
-</div>
-<div class="range-input">
-	<input on:input={handleMove} name="low" type="range" bind:value={low} {min} {max} {step} />
-	<input on:input={handleMove} name="high" type="range" bind:value={high} {min} {max} {step} />
+<div class="slider-container">
+	<div class="range-slider">
+		<span
+			style="left:{((low - min) / (max - min)) * 100}%; right:{100 -
+				((high - min) / (max - min)) * 100}%"
+			class="range-selected"
+		/>
+	</div>
+	<div class="range-input">
+		<input on:input={handleMove} name="low" type="range" bind:value={low} {min} {max} {step} />
+		<input on:input={handleMove} name="high" type="range" bind:value={high} {min} {max} {step} />
+	</div>
 </div>
 
-<br />
-<div>
+<div class="labels-container">
 	<label for="low">low:</label>
 	<input name="low" type="month" bind:value={monthYearLow} />
 	<label for="high">high:</label>
@@ -98,5 +105,8 @@
 		background-color: #fff;
 		pointer-events: auto;
 		-webkit-appearance: none;
+	}
+	.labels-container {
+		padding-top: 10px;
 	}
 </style>
