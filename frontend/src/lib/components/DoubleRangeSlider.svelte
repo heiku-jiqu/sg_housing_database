@@ -80,23 +80,20 @@
 </div>
 
 <div class="labels-container">
-	<label for="low">low:</label>
-	<input name="low" type="month" bind:value={monthYearLow} />
-	<label for="high">high:</label>
-	<input name="high" type="month" bind:value={monthYearHigh} />
+	<label for="low">{monthYearLow}</label>
+	<label for="high">{monthYearHigh}</label>
 </div>
 
 <style>
 	.range-slider {
 		height: 5px;
+		left: 2px;
 		position: relative;
 		background-color: #e1e9f6;
 		border-radius: 2px;
 	}
 	.range-selected {
 		height: 100%;
-		left: 30%;
-		right: 30%;
 		position: absolute;
 		border-radius: 5px;
 		background-color: #1b53c0;
@@ -126,5 +123,17 @@
 	}
 	.labels-container {
 		padding-top: 10px;
+		width: 100%;
+		display: inline-block;
+	}
+	.labels-container label:first-child {
+		float: left;
+		padding: 0.25em;
+		border: 2px solid black;
+	}
+	.labels-container label:last-child {
+		float: right;
+		padding: 0.25em;
+		border: 2px solid black;
 	}
 </style>
