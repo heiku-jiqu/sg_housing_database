@@ -1,4 +1,5 @@
 <script lang="ts">
+	import DoubleRangeSlider from '$lib/components/DoubleRangeSlider.svelte';
 	import { avg_hdb_resale_store } from '$lib/components/plots/store';
 	import { tableStore as table, streamData, town, getData } from './data';
 
@@ -26,6 +27,11 @@
 
 <a href="/">back to root</a>
 <div>{$table.numRows} rows loaded</div>
+
+<div style:padding="10px">
+	<DoubleRangeSlider dateHigh={new Date('12/1/2023')} dateLow={new Date('1/1/1990')} />
+</div>
+
 <div class="dropdown">
 	<select bind:value={selected} on:change={() => getData(selected, 1000)}>
 		{#each { length: town.numRows } as _, i}
