@@ -28,7 +28,6 @@ export async function getData(
 	startDate: Date = new Date('1/1/1990'),
 	endDate: Date = new Date('1/1/2023')
 ) {
-	console.log(startDate);
 	const stmt = await c.prepare(`
 	SELECT * FROM resale_hdb 
 	WHERE town = ? 

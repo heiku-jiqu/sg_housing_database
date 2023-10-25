@@ -1,15 +1,13 @@
 <script lang="ts">
 	import DoubleRangeSlider from '$lib/components/DoubleRangeSlider.svelte';
 	import { avg_hdb_resale_store } from '$lib/components/plots/store';
-	import { tableStore as table, streamData, town, getData } from './data';
+	import { tableStore as table, town, getData } from './data';
 
 	let num_rows_to_show = 10;
 	let selected: string = 'ANG MO KIO';
 	let dateHigh: Date = new Date('12/1/2023');
 	let dateLow: Date = new Date('1/1/2023');
 	getData(selected, dateLow, dateHigh);
-
-	//streamData();
 
 	const currency_formatter = new Intl.NumberFormat('en-US', {
 		style: 'currency',
@@ -40,7 +38,7 @@
 </div>
 
 <div class="dropdown">
-	<select bind:value={selected}>
+	<select bind:value={selected} on:change={() => getData(selected, dateLow, dateHigh)}>
 		{#each { length: town.numRows } as _, i}
 			<option value={town.get(i)?.town}>{prettyHeaders(town.get(i)?.town, ' ')}</option>
 		{/each}
