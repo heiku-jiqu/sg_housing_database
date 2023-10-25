@@ -23,13 +23,18 @@ export const streamData = async () => {
 };
 export const town = await c.query(`SELECT DISTINCT town FROM resale_hdb ORDER BY town`);
 
-export async function getData(town: string, limit: number) {
+export async function getData(
+	town: string,
+	startDate: Date = new Date('1/1/1990'),
+	endDate: Date = new Date('1/1/2023')
+) {
+	console.log(startDate);
 	const stmt = await c.prepare(`
 	SELECT * FROM resale_hdb 
 	WHERE town = ? 
+	AND month BETWEEN ? AND ?
 	ORDER BY month DESC
-	LIMIT ?
 	`);
-	const result = await stmt.query(town, limit);
+	const result = await stmt.query(town, startDate, endDate);
 	tableStore.set(result);
 }

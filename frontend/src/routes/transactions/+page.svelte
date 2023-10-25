@@ -4,9 +4,12 @@
 	import { tableStore as table, streamData, town, getData } from './data';
 
 	let num_rows_to_show = 10;
-	let selected: string;
+	let selected: string = 'ANG MO KIO';
+	let dateHigh: Date = new Date('12/1/2023');
+	let dateLow: Date = new Date('1/1/2023');
+	getData(selected, dateLow, dateHigh);
 
-	streamData();
+	//streamData();
 
 	const currency_formatter = new Intl.NumberFormat('en-US', {
 		style: 'currency',
@@ -29,11 +32,15 @@
 <div>{$table.numRows} rows loaded</div>
 
 <div style:padding="10px">
-	<DoubleRangeSlider dateHigh={new Date('12/1/2023')} dateLow={new Date('1/1/1990')} />
+	<DoubleRangeSlider
+		bind:dateHigh
+		bind:dateLow
+		on:change={() => getData(selected, dateLow, dateHigh)}
+	/>
 </div>
 
 <div class="dropdown">
-	<select bind:value={selected} on:change={() => getData(selected, 1000)}>
+	<select bind:value={selected}>
 		{#each { length: town.numRows } as _, i}
 			<option value={town.get(i)?.town}>{prettyHeaders(town.get(i)?.town, ' ')}</option>
 		{/each}
@@ -56,7 +63,7 @@
 	<table>
 		<tr>
 			{#each $table.schema.names as name}
-				<th>{prettyHeaders(name)}</th>
+				<th>{prettyHeaders(name.toString())}</th>
 			{/each}
 		</tr>
 		{#each { length: num_rows_to_show } as _, i}

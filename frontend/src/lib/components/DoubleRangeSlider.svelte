@@ -56,8 +56,26 @@
 		/>
 	</div>
 	<div class="range-input">
-		<input on:input={handleMove} name="low" type="range" bind:value={low} {min} {max} {step} />
-		<input on:input={handleMove} name="high" type="range" bind:value={high} {min} {max} {step} />
+		<input
+			on:input={handleMove}
+			on:change
+			name="low"
+			type="range"
+			bind:value={low}
+			{min}
+			{max}
+			{step}
+		/>
+		<input
+			on:input={handleMove}
+			on:change
+			name="high"
+			type="range"
+			bind:value={high}
+			{min}
+			{max}
+			{step}
+		/>
 	</div>
 </div>
 
