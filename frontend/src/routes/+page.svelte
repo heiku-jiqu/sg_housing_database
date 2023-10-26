@@ -21,7 +21,7 @@
 <svelte:component this={selected.component} />
 
 <a href="/transactions">See transaction details</a>
-<a href="/remaining_lease">See remaining lease details</a>
+<a href="/lease">See price vs lease details</a>
 <a href="/selections">Selections</a>
 
 <style>
