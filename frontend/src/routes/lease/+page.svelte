@@ -51,8 +51,12 @@
 	};
 </script>
 
+<p style:font-style="italic" style:font-size="1.5rem">
+	What is the relationship between transacted price of house and the number of years since its lease
+	started?
+</p>
 <span>Year of transaction:</span>
-<span style:font-weight="bold">{year}</span>
+<input type="number" bind:value={year} style:width="6ch" />
 <input bind:value={year} type="range" min={minMaxDates.minYear} max={minMaxDates.maxYear} />
 
 <div bind:clientWidth={width} style:overflow-x="auto">
