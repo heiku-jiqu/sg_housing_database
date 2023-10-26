@@ -3,7 +3,7 @@
 	import ObsPlot from '$lib/components/ObsPlot.svelte';
 	import * as Plot from '@observablehq/plot';
 
-	let year = 2020;
+	let year = minMaxDates.maxYear;
 	let width: number;
 	// let load = async function () {
 	// 	const pq = await fetch(`/api/kv/hdb`);
@@ -19,23 +19,23 @@
 
 	$: plotOpt = {
 		width: width,
+		marginTop: 30,
 		marginLeft: 50,
 		grid: true,
+		color: { legend: true },
 		marks: [
 			Plot.dot(
-				{ length: res.numRows },
+				//{ length: res.numRows },
+				res.toArray(),
 				{
-					x: res.getChild('lease_passed_year'),
-					y: res.getChild('avg_price'),
+					x: 'lease_passed_year',
+					y: 'avg_price',
 					// fy: res.getChild('year_of_transaction'),
 					// fx: res.getChild('flat_type'),
 					opacity: 0.5,
-					stroke: res.getChild('flat_type'),
+					stroke: 'flat_type',
 					tip: true,
-					filter: res
-						.getChild('year_of_transaction')
-						?.toArray()
-						.map((x: number) => x === year)
+					filter: (x) => x.year_of_transaction === year
 				}
 			),
 			Plot.frame()
