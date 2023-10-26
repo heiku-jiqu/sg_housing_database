@@ -5,6 +5,7 @@
 
 	let year = minMaxDates.maxYear;
 	let width: number;
+	$: plotWidth = Math.max(width, 1000);
 	// let load = async function () {
 	// 	const pq = await fetch(`/api/kv/hdb`);
 
@@ -18,7 +19,7 @@
 	// };
 
 	$: plotOpt = {
-		width: width,
+		width: plotWidth,
 		marginTop: 30,
 		marginLeft: 50,
 		grid: true,
@@ -31,21 +32,29 @@
 					x: 'lease_passed_year',
 					y: 'avg_price',
 					// fy: res.getChild('year_of_transaction'),
-					// fx: res.getChild('flat_type'),
+					fx: 'flat_type',
 					opacity: 0.5,
 					stroke: 'flat_type',
 					tip: true,
 					filter: (x) => x.year_of_transaction === year
 				}
 			),
-			Plot.frame()
+			Plot.frame(),
+			Plot.linearRegressionY(res.toArray(), {
+				x: 'lease_passed_year',
+				y: 'avg_price',
+				fx: 'flat_type',
+				stroke: 'grey',
+				filter: (x) => x.year_of_transaction === year
+			})
 		]
 	};
 </script>
 
+<span>Year of transaction:</span>
+<span style:font-weight="bold">{year}</span>
 <input bind:value={year} type="range" min={minMaxDates.minYear} max={minMaxDates.maxYear} />
-<span>{year}</span>
 
-<div bind:clientWidth={width}>
+<div bind:clientWidth={width} style:overflow-x="auto">
 	<ObsPlot {plotOpt} />
 </div>
