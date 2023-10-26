@@ -38,6 +38,7 @@
 </div>
 
 <div class="dropdown">
+	Recent transactions in
 	<select bind:value={selected} on:change={() => getData(selected, dateLow, dateHigh)}>
 		{#each { length: town.numRows } as _, i}
 			<option value={town.get(i)?.town}>{prettyHeaders(town.get(i)?.town, ' ')}</option>
@@ -46,16 +47,14 @@
 </div>
 
 <div>
+	<span>Number of rows to show:</span>
 	<input
-		type="range"
-		min="0"
-		max={$table.numRows}
+		type="number"
 		bind:value={num_rows_to_show}
-		style:width="100%"
+		style:width="{num_rows_to_show.toString().length + 3}ch"
 	/>
-	<input type="number" bind:value={num_rows_to_show} />
+	<input type="range" min="0" max={$table.numRows} bind:value={num_rows_to_show} />
 </div>
-<br />
 
 {#if $table.numRows > 0}
 	<table>
@@ -101,3 +100,23 @@
 		{/each}
 	</table>
 {/if}
+
+<style>
+	table {
+		max-height: 20em;
+		max-width: 100%;
+		display: inline-block;
+		overflow-x: auto;
+		overflow-y: auto;
+	}
+	td {
+		padding: 2px 0.75em;
+		white-space: nowrap;
+	}
+	th {
+		background-color: blue;
+		color: white;
+		padding: 0.3em 0.75em;
+		max-width: 100px;
+	}
+</style>
