@@ -27,7 +27,6 @@
 </script>
 
 <a href="/">back to root</a>
-<div>{$table.numRows} rows loaded</div>
 
 <div style:padding="10px">
 	<DoubleRangeSlider
@@ -37,8 +36,8 @@
 	/>
 </div>
 
-<div class="dropdown">
-	Recent transactions in
+<div class="dropdown" style:margin="0.5rem 0">
+	<h4 style:display="inline">Recent transactions in</h4>
 	<select bind:value={selected} on:change={() => getData(selected, dateLow, dateHigh)}>
 		{#each { length: town.numRows } as _, i}
 			<option value={town.get(i)?.town}>{prettyHeaders(town.get(i)?.town, ' ')}</option>
@@ -46,12 +45,13 @@
 	</select>
 </div>
 
-<div>
-	<span>Number of rows to show:</span>
+<div style:color="grey">
+	<span>Number of rows to show (out of {$table.numRows}):</span>
 	<input
 		type="number"
 		bind:value={num_rows_to_show}
 		style:width="{num_rows_to_show.toString().length + 3}ch"
+		style:color="grey"
 	/>
 	<input type="range" min="0" max={$table.numRows} bind:value={num_rows_to_show} />
 </div>
@@ -77,9 +77,9 @@
 	</table>
 {/if}
 
-<br />
 {#if $avg_hdb_resale_store}
-	<table>
+	<h4 style:font-size="2em" style:margin="0.25em 0 0">Average Cost of All Transactions</h4>
+	<table style:margin="0.5rem 0">
 		<tr>
 			{#each $avg_hdb_resale_store.schema.names as name}
 				<th>{prettyHeaders(name)}</th>
@@ -102,6 +102,16 @@
 {/if}
 
 <style>
+	.dropdown {
+		font-size: 2em;
+		padding: 0.2em 0;
+	}
+	select {
+		font-size: 2ch;
+		border: none;
+		border-bottom: 4px solid blue;
+		transition: 200ms;
+	}
 	table {
 		max-height: 20em;
 		max-width: 100%;
