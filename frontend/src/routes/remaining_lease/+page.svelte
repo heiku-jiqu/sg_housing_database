@@ -4,6 +4,7 @@
 	import * as Plot from '@observablehq/plot';
 
 	let year = 2020;
+	let width: number;
 	// let load = async function () {
 	// 	const pq = await fetch(`/api/kv/hdb`);
 
@@ -17,6 +18,7 @@
 	// };
 
 	$: plotOpt = {
+		width: width,
 		grid: true,
 		marks: [
 			Plot.dot(
@@ -43,4 +45,6 @@
 <input bind:value={year} type="range" min="1990" max="2023" />
 <span>{year}</span>
 
-<ObsPlot {plotOpt} />
+<div bind:clientWidth={width}>
+	<ObsPlot {plotOpt} />
+</div>
