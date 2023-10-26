@@ -3,8 +3,9 @@ import * as Arrow from 'apache-arrow';
 import { writable } from 'svelte/store';
 
 await tablesInitiated;
+
+const c = await conn;
 async function remaining_lease() {
-	const c = await conn;
 	const res = await c.query(`
 		WITH tbl AS (
 			SELECT *, 
@@ -25,3 +26,14 @@ async function remaining_lease() {
 }
 
 export const res = await remaining_lease();
+export const minMaxDates = (
+	await c.query(
+		`
+SELECT 
+	MIN(CAST((month[:4]) AS INTEGER)) AS minYear,
+	MAX(CAST((month[:4]) AS INTEGER)) AS maxYear,
+FROM resale_hdb;`
+	)
+)
+	.toArray()
+	.flatMap((x) => x.toJSON())[0];

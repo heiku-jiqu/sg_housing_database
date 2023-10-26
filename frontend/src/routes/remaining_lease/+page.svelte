@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { res } from './data';
+	import { res, minMaxDates } from './data';
 	import ObsPlot from '$lib/components/ObsPlot.svelte';
 	import * as Plot from '@observablehq/plot';
 
@@ -19,6 +19,7 @@
 
 	$: plotOpt = {
 		width: width,
+		marginLeft: 50,
 		grid: true,
 		marks: [
 			Plot.dot(
@@ -42,7 +43,7 @@
 	};
 </script>
 
-<input bind:value={year} type="range" min="1990" max="2023" />
+<input bind:value={year} type="range" min={minMaxDates.minYear} max={minMaxDates.maxYear} />
 <span>{year}</span>
 
 <div bind:clientWidth={width}>
