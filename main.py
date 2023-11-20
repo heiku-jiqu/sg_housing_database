@@ -74,6 +74,26 @@ if __name__ == "__main__":
             ]
         )
     )
+    
+    # Align "MULTI GENERATION" to "MULTI-GENERATION"
+    flat_type_idx = merged_hdb_table.column_names.index('flat_type')
+    merged_hdb_table.set_column(
+        flat_type_idx,
+        'flat_type',
+        pa.compute.replace_substring(
+            merged_hdb_table.column(flat_type_idx),
+            'MULTI ','MULTI-'
+        )
+
+    # Uppercase all flat_model
+    flat_model_idx = merged_hdb_table.column_names.index('flat_model')
+    merged_hdb_table.set_column(
+        flat_model_idx,
+        'flat_model',
+        pa.compute.utf8_upper(
+            merged_hdb_table.column(flat_model_idx)
+        )
+
     f_hdb = BytesIO()
     pq.write_table(merged_hdb_table, f_hdb, compression="ZSTD", compression_level=22)
     f_hdb.seek(0)
