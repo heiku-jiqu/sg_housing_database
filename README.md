@@ -2,6 +2,7 @@
 
 ## Powered By
 
+- [Github Actions](https://github.com/features/actions)
 - [DuckDB WASM](https://duckdb.org)
 - [Apache Arrow](https://arrow.apache.org/)
 - [Svelte and SvelteKit](https://svelte.dev)
