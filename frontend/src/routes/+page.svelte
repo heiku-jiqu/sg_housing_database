@@ -22,7 +22,8 @@
 
 <a href="/transactions">See transaction details</a>
 <a href="/lease">See price vs lease details</a>
-<a href="/selections">Selections</a>
+
+<!-- <a href="/selections">Selections</a> -->
 
 <style>
 	.tabNav {
